@@ -7,11 +7,14 @@ questions, and returns one `Verification` to read, compare or plot.
 
 from .answer_types import Ensemble, Grid, Series
 from .measures import contingency, fss
+from .phrases import PHRASES, Phrase
 from .verify import Verification, Verify, answers, each, verify
 
 __all__ = [
+    "PHRASES",
     "Ensemble",
     "Grid",
+    "Phrase",
     "Series",
     "Verification",
     "Verify",

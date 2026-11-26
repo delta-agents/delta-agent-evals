@@ -43,6 +43,7 @@ with `uv run examples/how_deep.py`.
 | [will_it_flood.py](examples/will_it_flood.py) | Will the fire station flood? | `contingency` (POD, FAR, CSI), `brier_score` of the probability the agent gives |
 | [dike_breach_map.py](examples/dike_breach_map.py) | Where is the polder wet, every hour? | `fss` and the skillful lead time, per scale |
 | [water_level_ensemble.py](examples/water_level_ensemble.py) | What will the water level be in 6 hours? | `crps_for_ensemble`, `rank_histogram`, a Brier score of your own |
+| [verbal_forecast.py](examples/verbal_forecast.py) | How likely is the fire station to flood? (in words) | `PHRASES` and `brier_score` per reader |
 | [better_than_without_tools.py](examples/better_than_without_tools.py) | Is the agent better than without tools? | `.skill(...)` and `.paired_bootstrap(...)` |
 
 The dike breach in a few lines:
@@ -87,7 +88,7 @@ hours; looked at 75 m wide, for all three.
    language model without tools, or the previous version of the agent.
 3. **Ask for a number.** "Likely" is anywhere from 57% to 91% to the people who read it, and
    "possible" from 22% to 70%: see [how people read probability words](docs/probability-phrases.md).
-   An agent that gives a probability can be verified; a word can only be guessed at.
+   `PHRASES` holds those readings, so an agent's words can still be scored, per reader.
 
 ## Development
 

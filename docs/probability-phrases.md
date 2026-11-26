@@ -13,41 +13,44 @@ Journal of Science Communication, 19(02), A03. <https://doi.org/10.22323/2.19020
 authors, licensed under [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/):
 shared unchanged, for non-commercial use. The figure is not covered by this repository's GPL.*
 
-The phrases were Dutch; the figure gives the paper's English translations. The authors advise
-giving a number, or a word with a number, rather than a word alone.
+The readers saw the Dutch words; the figure gives the paper's English translations. The authors
+advise giving a number, or a word with a number, rather than a word alone.
 
 ## The numbers
 
-Mean and 5%–95% range of the interpretation in percent, read from the figure.
+Mean and 5%–95% range of the readings in percent, read from the figure, with the Dutch words
+the readers saw (the paper's Table 2). The same table is `delta_agent_evals.PHRASES`, by Dutch or
+English word, and a test keeps this table equal to it; [verbal_forecast.py](../examples/verbal_forecast.py)
+scores an agent's words with it.
 
-| Phrase | Mean | 5%–95% |
-|---|---|---|
-| always | 96 | 81–100 |
-| certain | 96 | 82–100 |
-| almost certain | 88 | 71–98 |
-| almost always | 87 | 70–96 |
-| very likely | 86 | 70–95 |
-| very often | 79 | 60–95 |
-| high chance | 78 | 60–92 |
-| generally | 76 | 59–94 |
-| usually | 76 | 58–91 |
-| likely | 75 | 57–91 |
-| expected | 75 | 52–93 |
-| often | 73 | 58–90 |
-| probable | 67 | 41–86 |
-| possible | 47 | 22–70 |
-| maybe | 41 | 17–60 |
-| uncertain | 40 | 17–59 |
-| chance | 40 | 11–61 |
-| liable to happen | 38 | 10–60 |
-| doubtful | 34 | 10–54 |
-| sometimes | 33 | 11–55 |
-| not often | 24 | 9–48 |
-| low chance | 17 | 5–32 |
-| unlikely | 16 | 3–36 |
-| rarely | 13 | 2–30 |
-| almost never | 13 | 2–35 |
-| almost impossible | 11 | 1–40 |
-| very unlikely | 11 | 2–26 |
-| never | 6 | 0–32 |
-| impossible | 6 | 0–21 |
+| Dutch | English | Mean | 5%–95% |
+|---|---|---|---|
+| altijd | always | 96 | 81–100 |
+| zeker | certain | 96 | 82–100 |
+| bijna zeker | almost certain | 88 | 71–98 |
+| bijna altijd | almost always | 87 | 70–96 |
+| zeer waarschijnlijk | very likely | 86 | 70–95 |
+| heel vaak | very often | 79 | 60–95 |
+| grote kans | high chance | 78 | 60–92 |
+| doorgaans | generally | 76 | 59–94 |
+| meestal | usually | 76 | 58–91 |
+| waarschijnlijk | likely | 75 | 57–91 |
+| te verwachten | expected | 75 | 52–93 |
+| vaak | often | 73 | 58–90 |
+| vermoedelijk | probable | 67 | 41–86 |
+| mogelijk | possible | 47 | 22–70 |
+| misschien | maybe | 41 | 17–60 |
+| onzeker | uncertain | 40 | 17–59 |
+| kans | chance | 40 | 11–61 |
+| kan gebeuren | liable to happen | 38 | 10–60 |
+| twijfelachtig | doubtful | 34 | 10–54 |
+| soms | sometimes | 33 | 11–55 |
+| niet vaak | not often | 24 | 9–48 |
+| kleine kans | low chance | 17 | 5–32 |
+| onwaarschijnlijk | unlikely | 16 | 3–36 |
+| zelden | rarely | 13 | 2–30 |
+| bijna nooit | almost never | 13 | 2–35 |
+| bijna onmogelijk | almost impossible | 11 | 1–40 |
+| zeer onwaarschijnlijk | very unlikely | 11 | 2–26 |
+| nooit | never | 6 | 0–32 |
+| onmogelijk | impossible | 6 | 0–21 |

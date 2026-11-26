@@ -50,6 +50,7 @@ Run the lint and the tests before every commit. Commit with a DCO sign-off (`git
 | `src/delta_agent_evals/verify.py` | `answers` (a report as `(question, run, ...)` arrays), `verify`, `each`, `Verification` (with `.skill`, `.paired_bootstrap`, `.plot`) |
 | `src/delta_agent_evals/measures.py` | What `scores` lacks as one `metric(fcst, obs)`: `contingency` and `fss` with the skillful lead time |
 | `src/delta_agent_evals/answer_types.py` | Answers with dimensions: `Grid`, `Ensemble`, `Series` |
+| `src/delta_agent_evals/phrases.py` | `PHRASES`: how readers take 29 Dutch probability words (Willems, Albers & Smeets 2020) |
 | `src/delta_agent_evals/plot.py` | A `Verification` as an Observable Plot figure (optional `plot` extra) |
 | `examples/` | One question type per file, runnable; `tests/test_examples.py` checks their numbers |
 

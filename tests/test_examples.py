@@ -1,11 +1,19 @@
 """The examples are the documentation: their numbers, worked out by hand."""
 
+import re
+from pathlib import Path
+
 import better_than_without_tools
 import dike_breach_map
 import how_deep
 import pytest
+import verbal_forecast
 import water_level_ensemble
 import will_it_flood
+
+from delta_agent_evals import PHRASES
+
+DOCS = Path(__file__).parents[1] / "docs" / "probability-phrases.md"
 
 
 def values(v, measure):
@@ -62,3 +70,18 @@ def test_better_than_without_tools():
     assert float(bootstrap["mean_d"]) == pytest.approx((-0.45 - 0.3 - 1.5 - 2.1) / 4)
     # every difference is negative, so every bootstrap mean is: the agent is better in all of them
     assert float(bootstrap["a_better"]) == 1.0 and float(bootstrap["ci_upper"]) < 0
+
+
+def test_verbal_forecast():
+    assert PHRASES["waarschijnlijk"] is PHRASES["likely"]
+    # likely, possible, unlikely, very likely against floods, floods, dry, floods; Brier = mean (p - outcome)^2
+    low = ((0.57 - 1) ** 2 + (0.22 - 1) ** 2 + 0.03**2 + (0.70 - 1) ** 2) / 4
+    mean = ((0.75 - 1) ** 2 + (0.47 - 1) ** 2 + 0.16**2 + (0.86 - 1) ** 2) / 4
+    high = ((0.91 - 1) ** 2 + (0.70 - 1) ** 2 + 0.36**2 + (0.95 - 1) ** 2) / 4
+    assert values(verbal_forecast.brier, "brier_score") == pytest.approx([low, mean, high])
+    assert verbal_forecast.brier.missing == 1  # "fifty-fifty" is not one of the 29 words
+
+
+def test_phrase_table_in_the_docs_matches_phrases():
+    rows = re.findall(r"^\| ([a-z ]+) \| ([a-z ]+) \| (\d+) \| (\d+)–(\d+) \|$", DOCS.read_text(), re.MULTILINE)
+    assert [(d, e, int(m), int(lo), int(hi)) for d, e, m, lo, hi in rows] == list(dict.fromkeys(PHRASES.values()))

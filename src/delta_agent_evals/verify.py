@@ -51,10 +51,10 @@ def answers(report: EvaluationReport, path: Field, reference: Field = None) -> t
     for cases in runs.values():
         ref = _value(cases[0].expected_output, path if reference is None else reference)
         out = [_value(getattr(c, "output", None), path).broadcast_like(ref) for c in cases]
-        fcst.append(xr.concat(out, dim=pd.RangeIndex(len(out), name="run")))
+        fcst.append(xr.concat(xr.broadcast(*out), dim=pd.RangeIndex(len(out), name="run")))
         obs.append(ref)
     questions = pd.Index(list(runs), name="question")
-    fcst_da = xr.concat(fcst, dim=questions, join="outer")
+    fcst_da = xr.concat(xr.broadcast(*fcst), dim=questions, join="outer")  # a missing answer is NaN in every dimension
     missing = int(fcst_da.isnull().all([d for d in fcst_da.dims if d not in ("question", "run")]).sum())
     return fcst_da, xr.concat(obs, dim=questions), missing
 
