@@ -21,7 +21,7 @@ false alarms, Brier and CRPS, the Fractions Skill Score of a map.
 - [Installation](#installation)
 - [Examples](#examples)
 - [How it works](#how-it-works)
-- [Three things to remember](#three-things-to-remember)
+- [Four things to remember](#four-things-to-remember)
 - [Development](#development)
 - [Licence](#licence)
 
@@ -44,6 +44,7 @@ with `uv run examples/how_deep.py`.
 | [dike_breach_map.py](examples/dike_breach_map.py) | Where is the polder wet, every hour? | `fss` and the skillful lead time, per scale |
 | [water_level_ensemble.py](examples/water_level_ensemble.py) | What will the water level be in 6 hours? | `crps_for_ensemble`, `rank_histogram`, a Brier score of your own |
 | [verbal_forecast.py](examples/verbal_forecast.py) | How likely is the fire station to flood? (in words) | `PHRASES` and `brier_score` per reader |
+| [plain_words.py](examples/plain_words.py) | Do people understand the answer? | `Jargon`: water terms most laypeople misread |
 | [better_than_without_tools.py](examples/better_than_without_tools.py) | Is the agent better than without tools? | `.skill(...)` and `.paired_bootstrap(...)` |
 
 The dike breach in a few lines:
@@ -79,7 +80,7 @@ hours; looked at 75 m wide, for all three.
 - **In the report too.** `verify(...)` is a pydantic-evals report evaluator:
   `Dataset(..., report_evaluators=[verify("floods", contingency)])`.
 
-## Three things to remember
+## Four things to remember
 
 1. **Pool ratios, don't average them.** POD, FAR, CSI, skill scores and FSS are computed over all
    questions together. `scores` does that by default; `preserve_dims=["question"]` gives a score
@@ -89,6 +90,9 @@ hours; looked at 75 m wide, for all three.
 3. **Ask for a number.** "Likely" is anywhere from 57% to 91% to the people who read it, and
    "possible" from 22% to 70%: see [how people read probability words](docs/probability-phrases.md).
    `PHRASES` holds those readings, so an agent's words can still be scored, per reader.
+4. **Mind the jargon.** Only 13% of laypeople read "river basin" as a hydrologist does, and 45%
+   "discharge": see [water terms laypeople read differently](docs/water-terms.md). `Jargon` flags
+   such words in each answer, offline or on live traffic.
 
 ## Development
 

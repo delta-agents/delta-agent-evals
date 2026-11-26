@@ -29,7 +29,7 @@ Run the lint and the tests before every commit. Commit with a DCO sign-off (`git
 - **Titles** of issues, pull requests and their squash commits follow
   [Conventional Commits](https://www.conventionalcommits.org): `type(scope): summary`, the summary
   lowercase and imperative. Types: `feat`, `fix`, `perf`, `refactor`, `test`, `docs`, `ci`, `chore`.
-  Scopes: `verify`, `measures`, `answers`, `plot`, `examples`, `readme`.
+  Scopes: `verify`, `measures`, `answers`, `phrases`, `jargon`, `plot`, `examples`, `readme`.
 - **Versions** follow [semantic versioning](https://semver.org): `pyproject.toml` and `__version__` carry
   it. Before 1.0, `feat` raises the minor version and `fix` the patch.
 - **Review before every commit** (hook in `.claude/settings.local.json`, local and not in git): the lint and
@@ -48,6 +48,7 @@ Run the lint and the tests before every commit. Commit with a DCO sign-off (`git
 | Path | Role |
 |---|---|
 | `src/delta_agent_evals/verify.py` | `answers` (a report as `(question, run, ...)` arrays), `verify`, `each`, `Verification` (with `.skill`, `.paired_bootstrap`, `.plot`) |
+| `src/delta_agent_evals/jargon.py` | `WATER_TERMS` and the `Jargon` evaluator: water terms most laypeople misread (Venhuizen et al. 2019) |
 | `src/delta_agent_evals/measures.py` | What `scores` lacks as one `metric(fcst, obs)`: `contingency` and `fss` with the skillful lead time |
 | `src/delta_agent_evals/answer_types.py` | Answers with dimensions: `Grid`, `Ensemble`, `Series` |
 | `src/delta_agent_evals/phrases.py` | `PHRASES`: how readers take 29 Dutch probability words (Willems, Albers & Smeets 2020) |
@@ -61,6 +62,8 @@ Run the lint and the tests before every commit. Commit with a DCO sign-off (`git
 - A measure is a function `metric(fcst, obs, **options)` returning a DataArray or Dataset, like every
   metric in `scores`. Use the `scores` metric when it exists; write a function in `measures.py` only for
   what it lacks. No evaluator class per measure.
+- A check on the wording of one answer, such as `Jargon`, is a pydantic-evals `Evaluator`: it needs no
+  reference answer, so it also runs as an online evaluation.
 - `scores` pools over all dimensions unless told otherwise, so ratios (POD, FAR, CSI, FSS, skill scores)
   are pooled over all questions and runs, never averaged per question.
 - A missing or failed answer is NaN, which `scores` leaves out; `Verification.missing` counts them.

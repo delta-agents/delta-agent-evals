@@ -6,14 +6,15 @@ from pathlib import Path
 import better_than_without_tools
 import dike_breach_map
 import how_deep
+import plain_words
 import pytest
 import verbal_forecast
 import water_level_ensemble
 import will_it_flood
 
-from delta_agent_evals import PHRASES
+from delta_agent_evals import PHRASES, WATER_TERMS
 
-DOCS = Path(__file__).parents[1] / "docs" / "probability-phrases.md"
+DOCS = Path(__file__).parents[1] / "docs"
 
 
 def values(v, measure):
@@ -83,5 +84,26 @@ def test_verbal_forecast():
 
 
 def test_phrase_table_in_the_docs_matches_phrases():
-    rows = re.findall(r"^\| ([a-z ]+) \| ([a-z ]+) \| (\d+) \| (\d+)–(\d+) \|$", DOCS.read_text(), re.MULTILINE)
+    rows = re.findall(
+        r"^\| ([a-z ]+) \| ([a-z ]+) \| (\d+) \| (\d+)–(\d+) \|$",
+        (DOCS / "probability-phrases.md").read_text(),
+        re.MULTILINE,
+    )
     assert [(d, e, int(m), int(lo), int(hi)) for d, e, m, lo, hi in rows] == list(dict.fromkeys(PHRASES.values()))
+
+
+def test_plain_words():
+    flagged = {
+        name: [c.assertions["Jargon"].reason for c in report.cases if not c.assertions["Jargon"].value]
+        for name, report in plain_words.reports.items()
+    }
+    # Table B1: discharge, river basin and groundwater are read as hydrologists do by 45%, 13% and 36% of laypeople;
+    # "downstream" (58%) passes, and "river" inside "river basin" is not counted twice
+    assert [r.split(":")[0] for r in flagged["hydrologist"]] == ['"discharge"', '"river basin"', '"groundwater"']
+    assert flagged["plain"] == []
+
+
+def test_water_terms_in_the_docs_match():
+    text = (DOCS / "water-terms.md").read_text()
+    rows = re.findall(r"^\| ([a-z ]+) \| ([^|]+) \| (\d+)% \| (\d+)% \|$", text, re.MULTILINE)
+    assert [(t, m, int(e), int(lay)) for t, m, e, lay in rows] == list(WATER_TERMS.values())
