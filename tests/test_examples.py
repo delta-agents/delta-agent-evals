@@ -58,8 +58,20 @@ def test_dike_breach_map():
 def test_water_level_ensemble():
     # fair CRPS = mean|x - y| - sum_{i != j} |x_i - x_j| / (2 M (M - 1)) per question, then the mean
     assert float(water_level_ensemble.crps["crps_for_ensemble"]) == pytest.approx((1 / 6 + 0.1 + 0.8) / 3)
-    # P(> 1.5 m) = 0.5, 0.25, 1 against events 1, 0, 0
-    assert float(water_level_ensemble.brier["brier_above_alarm"]) == pytest.approx((0.25 + 0.0625 + 1) / 3)
+    # fair Brier of i of m = 4 members above 1.5 m against event y: (i/m - y)^2 - i (m - i) / (m^2 (m - 1));
+    # i = 2, 1, 4 against y = 1, 0, 0: 0.25 - 4/48 = 1/6, 0.0625 - 3/48 = 0, 1 - 0 = 1
+    brier = values(water_level_ensemble.brier, "brier_score_for_ensemble")
+    assert brier == pytest.approx([(1 / 6 + 0 + 1) / 3])  # one per threshold
+
+    # without an answer at 12:00 that question is left out
+    async def no_answer_at_noon(question: str):
+        if "12:00" in question:
+            raise RuntimeError("no ensemble")
+        return await water_level_ensemble.agent(question)
+
+    report = water_level_ensemble.dataset.evaluate_sync(no_answer_at_noon, progress=False)
+    brier = water_level_ensemble.above_alarm.on(report)
+    assert int(brier.missing) == 1 and values(brier, "brier_score_for_ensemble") == pytest.approx([(1 / 6 + 0) / 2])
     # members below the observation: 2, 3, 0 -> ranks 3, 4, 1 of 5
     assert values(water_level_ensemble.ranks, "rank_histogram") == pytest.approx([1 / 3, 0, 1 / 3, 1 / 3, 0])
 

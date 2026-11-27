@@ -1,7 +1,7 @@
 """What will the water level be? An agent that answers with an ensemble, and any `scores` metric for ensembles."""
 
 from pydantic_evals import Case, Dataset
-from scores.probability import brier_score, crps_for_ensemble, rank_histogram
+from scores.probability import brier_score_for_ensemble, crps_for_ensemble, rank_histogram
 
 from delta_agent_evals import Ensemble, Series, verify
 
@@ -26,14 +26,10 @@ async def agent(question: str) -> Ensemble:
     return Ensemble(lead_time=[6], members=[MEMBERS[next(i for i, t in enumerate(TIMES) if t in question)]])
 
 
-def brier_above_alarm(fcst, obs):
-    """Brier score of P(level > alarm) = the fraction of members above it: any function (fcst, obs) is a metric."""
-    return brier_score((fcst > ALARM).mean("member"), (obs > ALARM).astype(float))
-
-
 report = dataset.evaluate_sync(agent, progress=False)
 crps = verify(None, crps_for_ensemble, ensemble_member_dim="member", method="fair").on(report)
-brier = verify(None, brier_above_alarm).on(report)
+above_alarm = verify(None, brier_score_for_ensemble, ensemble_member_dim="member", event_thresholds=ALARM)
+brier = above_alarm.on(report)
 ranks = verify(None, rank_histogram, ens_member_dim="member").on(report)
 
 if __name__ == "__main__":
