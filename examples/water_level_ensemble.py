@@ -31,6 +31,3 @@ crps = verify(None, crps_for_ensemble, ensemble_member_dim="member", method="fai
 above_alarm = verify(None, brier_score_for_ensemble, ensemble_member_dim="member", event_thresholds=ALARM)
 brier = above_alarm.on(report)
 ranks = verify(None, rank_histogram, ens_member_dim="member").on(report)
-
-if __name__ == "__main__":
-    print(crps.to_frame(), brier.to_frame(), ranks.to_frame(), sep="\n\n")

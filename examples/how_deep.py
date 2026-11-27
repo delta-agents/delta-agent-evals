@@ -24,6 +24,3 @@ async def agent(question: str) -> float | None:
 report = dataset.evaluate_sync(agent, progress=False)
 errors = verify(None, mae, rmse).on(report)
 hits = verify(None, percent_within_x, threshold=each(0.1, 0.25, 0.5)).on(report)
-
-if __name__ == "__main__":
-    print(errors.to_frame(), hits.to_frame(), sep="\n\n")

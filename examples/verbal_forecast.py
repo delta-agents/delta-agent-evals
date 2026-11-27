@@ -45,6 +45,3 @@ async def agent(question: str) -> Answer:
 report = dataset.evaluate_sync(agent, progress=False)
 as_read = verify(lambda a: PHRASES.get(a.chance), brier_score, reference="floods", preserve_dims=["reading"])
 brier = as_read.on(report)
-
-if __name__ == "__main__":
-    print(brier.to_frame())

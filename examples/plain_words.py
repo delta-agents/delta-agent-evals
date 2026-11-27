@@ -39,10 +39,3 @@ reports = {
     name: dataset.evaluate_sync(agent, progress=False)
     for name, agent in [("hydrologist", hydrologist), ("plain", plain)]
 }
-
-if __name__ == "__main__":
-    for name, report in reports.items():
-        print(name)
-        for case in report.cases:
-            check = case.assertions["Jargon"]
-            print("  ok " if check.value else "  not", case.inputs, check.reason or "")

@@ -37,6 +37,3 @@ async def agent(question: str) -> Grid:
 
 report = dataset.evaluate_sync(agent, progress=False)
 maps = verify(None, fss, event_threshold=0.5, window_size=each(1, 3)).on(report)
-
-if __name__ == "__main__":
-    print(maps["fss"].round(3).to_pandas(), maps["skillful_lead_time"].to_pandas(), sep="\n\n")
