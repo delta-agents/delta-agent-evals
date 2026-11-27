@@ -5,5 +5,5 @@ Issues and pull requests are welcome on [GitHub](https://github.com/delta-agents
 and conventions. This site, at <http://localhost:8000/delta-agent-evals/>:
 
 ```bash
-uv run --group docs --all-extras zensical serve
+uv run --group docs zensical serve
 ```

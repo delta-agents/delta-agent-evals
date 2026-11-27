@@ -11,6 +11,6 @@ The same questions to the agent and to the language model without tools. `.on(ag
 === "Output"
 
     ```python exec="on" result="text"
-    --8<-- "docs/output.py"
-    print(output("better_than_without_tools"))
+    --8<-- "docs/show.py"
+    print(results("better_than_without_tools", "errors", "skill", "bootstrap"))
     ```

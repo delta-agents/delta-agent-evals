@@ -11,6 +11,6 @@ An answer as an `Ensemble` of four members, against an observed `Series`. The en
 === "Output"
 
     ```python exec="on" result="text"
-    --8<-- "docs/output.py"
-    print(output("water_level_ensemble"))
+    --8<-- "docs/show.py"
+    print(results("water_level_ensemble", "crps", "brier", "ranks"))
     ```

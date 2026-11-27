@@ -12,8 +12,7 @@ uv sync                               # environment and dev tools
 uv run ruff check src tests examples  # lint (CI)
 uv run ruff format src tests examples # format
 uv run pytest -q                      # tests, including every example (CI)
-uv run examples/dike_breach_map.py    # one example
-uv run --group docs --all-extras zensical serve  # the documentation site (CI builds it strictly)
+uv run --group docs zensical serve     # the documentation site (CI builds it strictly)
 ```
 
 Run the lint and the tests before every commit. Commit with a DCO sign-off (`git commit -s`).

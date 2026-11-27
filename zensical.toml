@@ -1,4 +1,4 @@
-# The documentation, built with Zensical: uv run --group docs --all-extras zensical serve
+# The documentation, built with Zensical: uv run --group docs zensical serve
 [project]
 site_name = "delta-agent-evals"
 site_url = "https://delta-agents.github.io/delta-agent-evals/"

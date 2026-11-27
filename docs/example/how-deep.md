@@ -11,6 +11,6 @@ A number in the answer: the water depth at four places. `mae` and `rmse` give th
 === "Output"
 
     ```python exec="on" result="text"
-    --8<-- "docs/output.py"
-    print(output("how_deep"))
+    --8<-- "docs/show.py"
+    print(results("how_deep", "errors", "hits"))
     ```

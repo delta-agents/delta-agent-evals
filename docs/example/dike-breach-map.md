@@ -11,16 +11,13 @@ A map per hour after a dike breach, as a `Grid`. The agent places the water one 
 === "Output"
 
     ```python exec="on" result="text"
-    --8<-- "docs/output.py"
-    print(output("dike_breach_map"))
+    --8<-- "docs/show.py"
+    print(results("dike_breach_map", "maps"))
     ```
 
-`.plot()` draws the FSS per lead time, one line per window size:
+`.plot()` draws the FSS per lead time, one line per window size; the pointer shows the values:
 
 ```python exec="on" html="true"
-import pathlib, runpy, tempfile
-maps = runpy.run_path("examples/dike_breach_map.py")["maps"]
-path = pathlib.Path(tempfile.mkdtemp(), "fss.html")
-maps.plot(format="html", path=str(path))
-print(path.read_text())
+--8<-- "docs/show.py"
+print(figure("dike_breach_map", "maps"))
 ```

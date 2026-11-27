@@ -11,6 +11,6 @@ A yes or no, and the agent's confidence in it. `contingency` puts all answers in
 === "Output"
 
     ```python exec="on" result="text"
-    --8<-- "docs/output.py"
-    print(output("will_it_flood"))
+    --8<-- "docs/show.py"
+    print(results("will_it_flood", "table", "brier"))
     ```

@@ -11,6 +11,6 @@ An agent that says "likely" instead of a number. `PHRASES` turns each word into 
 === "Output"
 
     ```python exec="on" result="text"
-    --8<-- "docs/output.py"
-    print(output("verbal_forecast"))
+    --8<-- "docs/show.py"
+    print(results("verbal_forecast", "brier"))
     ```

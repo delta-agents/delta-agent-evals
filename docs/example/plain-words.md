@@ -11,6 +11,6 @@ The same answers by a hydrologist and in plain words. `Jargon` flags water terms
 === "Output"
 
     ```python exec="on" result="text"
-    --8<-- "docs/output.py"
-    print(output("plain_words"))
+    --8<-- "docs/show.py"
+    print(results("plain_words", "reports"))
     ```
