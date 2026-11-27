@@ -5,26 +5,25 @@
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org)
 [![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-blue)](LICENSE)
 
-**delta-agent-evals** tests artificial intelligence (AI) agents the way water and weather science
-tests its models. An agent's answer is the forecast, the reference answer the observation, and any
-metric of [scores](https://github.com/nci/scores) compares the two over a dataset of questions run
-with [pydantic-evals](https://ai.pydantic.dev/evals/). One function, `verify`, does it for a number,
-a yes or no, a probability, an ensemble or a map per lead time.
+**delta-agent-evals** brings water and weather science verification to artificial intelligence (AI)
+agents. Treat an agent's answer as the forecast, the reference as the observation, and compare them
+with any [scores](https://github.com/nci/scores) metric on a question dataset run in
+[pydantic-evals](https://ai.pydantic.dev/evals/). A single function, `verify`, handles numbers, yes
+or no, probabilities, ensembles, and maps per lead time.
 
-*delta-agent-evals is developed by [HKV lijn in water](https://www.hkv.nl) for
-[Delta Agents](https://delta-agents.nl).*
+*Developed by [HKV lijn in water](https://www.hkv.nl) for [Delta Agents](https://delta-agents.nl).*
 
 ## Documentation
 
-See the [documentation site](https://delta-agents.github.io/delta-agent-evals/): one page per kind
-of measure, each with an interactive figure that shows how the measure comes about. For language
-models it is also there as [llms.txt](https://delta-agents.github.io/delta-agent-evals/llms.txt) and
+Explore the [documentation site](https://delta-agents.github.io/delta-agent-evals/): a page per
+measure category, each with an interactive figure showing how the score is built. Language models
+can read it via [llms.txt](https://delta-agents.github.io/delta-agent-evals/llms.txt) and
 [llms-full.txt](https://delta-agents.github.io/delta-agent-evals/llms-full.txt).
 
 ## Example
 
-Four questions about the water depth if a dike breaches, an agent that answers three of them, and the
-mean absolute error, the root mean squared error and how often an answer is within a tolerance:
+Consider four questions on water depth after a dike breach and an agent that answers three. Here we
+compute mean absolute error, root mean squared error, and the share within a tolerance:
 
 ```python
 from pydantic_evals import Case, Dataset
@@ -59,9 +58,9 @@ hits = verify(None, percent_within_x, threshold=each(0.1, 0.25, 0.5)).on(report)
   <img alt="Per question the reference depth, the agent's answer and the error between them, with the band of a tolerance of 0.25 m" src="images/errors-light.svg">
 </picture>
 
-Answers can have dimensions of their own. A map per lead time, a `Grid`, gets the Fractions Skill
-Score of `scores` per lead time, the level from which it is useful, and the skillful lead time. Over a
-wider window, a map that is a little off counts as useful for longer:
+Answers can carry their own dimensions. Pass a map per lead time as a `Grid` to get the Fractions
+Skill Score from `scores` at each lead time, its useful threshold, and skillful lead time. Widening
+the window lets a slightly offset map remain useful for longer:
 
 ```python
 from delta_agent_evals import each, fss, verify
@@ -78,17 +77,18 @@ skill["skillful_lead_time"]  # 120 min per 25 m pixel, 180 min over 75 m
 
 ## Features
 
-- Any metric of `scores` on the answers of a pydantic-evals report, through one function: `verify`.
-- Answers as a number, a yes or no, a probability, or with dimensions of their own: `Grid`,
-  `Ensemble` and `Series`, or anything with `to_xarray()`.
-- Ratios pooled over all questions, never averaged per question; a missing answer is left out and
-  counted per agent.
-- Repeated runs as an ensemble, and options swept with `each(...)`.
-- Agents side by side, with a skill score against a reference and a paired bootstrap.
-- How readers take an answer: probability words such as "likely" per reader (`PHRASES`), and water
-  terms that most laypeople misread (`Jargon`), also on live traffic.
-- One result, a `Verification`: an xarray Dataset, a tidy table and an
-  [Observable Plot](https://observablehq.com/plot/) figure; also a pydantic-evals report evaluator.
+- Apply any metric from `scores` to a pydantic-evals report through one entry point: `verify`.
+- Evaluate scalars (numbers, yes or no, probabilities) and multidimensional types: `Grid`,
+  `Ensemble`, `Series`, or anything with `to_xarray()`.
+- Pool ratios over all questions rather than averaging per question; omit missing answers and count
+  them per agent.
+- Use repeated runs as an ensemble; sweep options with `each(...)`.
+- Compare agents side by side using a reference skill score and paired bootstrap.
+- Check reader interpretation: probability words like "likely" per reader (`PHRASES`) and water
+  terms most laypeople misread (`Jargon`), also on live traffic.
+- Get one `Verification`: an xarray Dataset, tidy table, and [Observable
+  Plot](https://observablehq.com/plot/) figure; `verify(...)` is also a pydantic-evals report
+  evaluator.
 
 | Measure | Example | Use case |
 |---|---|---|
@@ -106,7 +106,7 @@ skill["skillful_lead_time"]  # 120 min per 25 m pixel, 180 min over 75 m
 pip install git+https://github.com/delta-agents/delta-agent-evals
 ```
 
-With [uv](https://docs.astral.sh/uv/), and with the `plot` extra for figures:
+Or with [uv](https://docs.astral.sh/uv/) and the `plot` extra for figures:
 
 ```bash
 uv add "delta-agent-evals[plot] @ git+https://github.com/delta-agents/delta-agent-evals"
@@ -114,28 +114,28 @@ uv add "delta-agent-evals[plot] @ git+https://github.com/delta-agents/delta-agen
 
 ## Getting help
 
-For questions, bugs and ideas, please open a
-[GitHub issue](https://github.com/delta-agents/delta-agent-evals/issues).
+Questions, bugs, or ideas? Open a [GitHub
+issue](https://github.com/delta-agents/delta-agent-evals/issues).
 
 ## Development
 
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
-See [Contributing](https://delta-agents.github.io/delta-agent-evals/contributing/) and
-[CLAUDE.md](CLAUDE.md) for the commands and the conventions.
+Read [Contributing](https://delta-agents.github.io/delta-agent-evals/contributing/) and
+[CLAUDE.md](CLAUDE.md) for commands and conventions.
 
 ## Built on
 
-delta-agent-evals stands on [scores](https://github.com/nci/scores) (Leeuwenburg et al. 2024,
-<https://doi.org/10.21105/joss.06889>) for every metric and on
-[pydantic-evals](https://ai.pydantic.dev/evals/) for running the questions. The checks on how readers
-take an answer come from Willems, Albers & Smeets (2020, <https://doi.org/10.22323/2.19020203>) and
-Venhuizen et al. (2019, <https://doi.org/10.5194/hess-23-393-2019>); the useful level of the
-Fractions Skill Score from Roberts & Lean (2008, <https://doi.org/10.1175/2007MWR2123.1>).
+delta-agent-evals relies on [scores](https://github.com/nci/scores) (Leeuwenburg et al. 2024,
+<https://doi.org/10.21105/joss.06889>) for all metrics and
+[pydantic-evals](https://ai.pydantic.dev/evals/) to run questions. Reader-interpretation checks draw
+on Willems, Albers & Smeets (2020, <https://doi.org/10.22323/2.19020203>) and Venhuizen et al.
+(2019, <https://doi.org/10.5194/hess-23-393-2019>); the useful threshold for the Fractions Skill
+Score follows Roberts & Lean (2008, <https://doi.org/10.1175/2007MWR2123.1>).
 
 ## Licence
 
-GNU General Public License (GPL) 3.0, [HKV lijn in water](https://www.hkv.nl). The figure in
-[docs/probability-phrases.md](docs/probability-phrases.md) is Creative Commons
+GNU General Public License (GPL) 3.0, [HKV lijn in water](https://www.hkv.nl). The
+[docs/probability-phrases.md](docs/probability-phrases.md) figure is Creative Commons
 Attribution-NonCommercial-NoDerivatives (CC BY-NC-ND) 4.0 by its authors.
