@@ -2,7 +2,7 @@
 [project]
 site_name = "delta-agent-evals"
 site_url = "https://delta-agents.github.io/delta-agent-evals/"
-site_description = "How good are an AI agent's answers? Measured with the verification statistics of water and weather science"
+site_description = "How good are an agent's answers? Measured with the verification statistics of water and weather science"
 repo_url = "https://github.com/delta-agents/delta-agent-evals"
 repo_name = "delta-agents/delta-agent-evals"
 site_dir = "site"
@@ -78,3 +78,31 @@ options.members_order = "source"
 options.separate_signature = true
 options.show_signature_annotations = true
 options.filters = ["!^_"]
+
+# llms.txt, llms-full.txt and a Markdown copy of each page listed here, for language models
+[project.plugins.llmstxt]
+markdown_description = "An agent's answer is the forecast, the reference answer the observation, and any metric of scores compares the two over a pydantic-evals dataset of questions."
+full_output = "llms-full.txt"
+
+[project.plugins.llmstxt.sections]
+"Getting started" = [
+  { "index.md" = "What it measures, and the steps of verify" },
+  { "installation.md" = "Installation" },
+]
+"Examples" = [
+  { "example/index.md" = "One kind of measure per page" },
+  { "example/continuous-errors.md" = "Errors of a number" },
+  { "example/yes-or-no.md" = "Yes or no, and a probability" },
+  { "example/maps.md" = "A map per lead time" },
+  { "example/ensembles.md" = "An ensemble" },
+  { "example/skill-and-significance.md" = "Two agents side by side" },
+  { "example/probability-words.md" = "Probability words, as readers take them" },
+  { "example/plain-language.md" = "Water terms laypeople misread" },
+]
+"User guide" = [
+  { "how-it-works.md" = "From answers to arrays, metrics and the result" },
+  { "probability-phrases.md" = "How readers take probability words" },
+  { "water-terms.md" = "Water terms laypeople read differently" },
+  { "api.md" = "Generated from the docstrings" },
+  { "contributing.md" = "Issues, pull requests and this site" },
+]

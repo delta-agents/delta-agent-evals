@@ -8,7 +8,7 @@ metric of [scores](https://github.com/nci/scores) compares the two over a datase
 with [pydantic-evals](https://ai.pydantic.dev/evals/): numbers, yes or no, probabilities, ensembles
 and maps per lead time, with ratios pooled over all questions and agents side by side.
 
-**Documentation:** <https://delta-agents.github.io/delta-agent-evals/>
+**Documentation:** <https://delta-agents.github.io/delta-agent-evals/> ([llms.txt](https://delta-agents.github.io/delta-agent-evals/llms.txt), [llms-full.txt](https://delta-agents.github.io/delta-agent-evals/llms-full.txt))
 
 ## Installation
 
