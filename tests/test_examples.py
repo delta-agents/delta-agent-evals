@@ -1,6 +1,7 @@
 """The examples are the documentation: their numbers, worked out by hand."""
 
 import re
+import runpy
 from pathlib import Path
 
 import continuous_errors
@@ -15,6 +16,7 @@ import yes_or_no
 from delta_agent_evals import PHRASES, WATER_TERMS
 
 DOCS = Path(__file__).parents[1] / "docs"
+README = Path(__file__).parents[1] / "README.md"
 
 
 def values(v, measure):
@@ -120,3 +122,14 @@ def test_water_terms_in_the_docs_match():
     text = (DOCS / "water-terms.md").read_text()
     rows = re.findall(r"^\| ([a-z ]+) \| ([^|]+) \| (\d+)% \| (\d+)% \|$", text, re.MULTILINE)
     assert [(t, m, int(e), int(lay)) for t, m, e, lay in rows] == list(WATER_TERMS.values())
+
+
+def test_the_example_in_the_readme(tmp_path):
+    example = tmp_path / "readme.py"
+    example.write_text(re.search(r"```python\n(.*?)```", README.read_text(), re.DOTALL).group(1))
+    found = runpy.run_path(str(example))
+    # errors 0.05, 0.2 and 0 on three answers; the pumping station has none
+    assert float(found["errors"]["mae"]) == pytest.approx(0.25 / 3) and int(found["errors"].missing) == 1
+    assert float(found["errors"]["rmse"]) == pytest.approx(((0.05**2 + 0.2**2) / 3) ** 0.5)
+    # 2, 3 and 3 of the three answers are within 0.1, 0.25 and 0.5 m
+    assert values(found["hits"], "percent_within_x") == pytest.approx([200 / 3, 100, 100])
