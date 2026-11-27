@@ -79,8 +79,8 @@ class Verification:
     """The measures of one field: an xarray Dataset with a coordinate per agent, swept option or kept dimension."""
 
     data: xr.Dataset
-    missing: int
-    """Runs without an answer, left out of every measure."""
+    missing: xr.DataArray
+    """Runs without an answer, per agent, left out of every measure."""
 
     def __getitem__(self, measure: str) -> xr.DataArray:
         return self.data[measure]
@@ -126,7 +126,7 @@ class Verification:
     def to_analysis(self, title: str) -> ReportAnalysis:
         """A pydantic-evals analysis: one number, or the tidy table."""
         df = self.to_frame()
-        note = f"{self.missing} runs without an answer left out"
+        note = f"{int(self.missing.sum())} runs without an answer left out"
         if len(df) == 1:
             return ScalarResult(title=title, value=round(float(df.value[0]), 4), description=note)
         rows = df.round(4).astype(object).where(df.notna(), None).values.tolist()
@@ -156,10 +156,12 @@ class Verify(ReportEvaluator):
             raise ValueError(f"Needs reports with distinct names, not {names}: name them, .on(a=..., b=...)")
         named = {r.name: r for r in reports} | named
         results = {name: self._one(r) for name, r in named.items()}
-        data = xr.concat([d for d, _ in results.values()], dim=pd.Index(list(named), name="agent"))
-        return Verification(
-            data if len(named) > 1 else data.squeeze("agent", drop=True), sum(m for _, m in results.values())
-        )
+        agents = pd.Index(list(named), name="agent")
+        data = xr.concat([d for d, _ in results.values()], dim=agents)
+        missing = xr.DataArray([m for _, m in results.values()], coords=[agents])
+        if len(named) == 1:
+            data, missing = data.squeeze("agent", drop=True), missing.squeeze("agent", drop=True)
+        return Verification(data, missing)
 
     def _one(self, report: EvaluationReport) -> tuple[xr.Dataset, int]:
         fcst, obs, missing = answers(report, self.field, self.reference)

@@ -42,6 +42,13 @@ def test_a_failed_run_is_a_missing_answer():
     v = verify(None, mae).on(DATASET.evaluate_sync(flaky, progress=False))
     assert v.missing == 1 and float(v["mae"]) == pytest.approx(0.5)
 
+    async def steady(question: str) -> float:
+        return 1.5
+
+    # side by side, each agent keeps its own count
+    runs = {a.__name__: DATASET.evaluate_sync(a, progress=False) for a in (flaky, steady)}
+    assert verify(None, mae).on(**runs).missing.to_series().to_dict() == {"flaky": 1, "steady": 0}
+
 
 def test_a_function_of_the_answer_as_field():
     class Answer(BaseModel):
