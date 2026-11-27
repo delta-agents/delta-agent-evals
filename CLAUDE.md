@@ -55,6 +55,7 @@ Run the lint and the tests before every commit. Commit with a DCO sign-off (`git
 | `src/delta_agent_evals/plot.py` | A `Verification` as an Observable Plot figure (optional `plot` extra) |
 | `examples/` | One kind of measure per file, with a use case from flood management; `tests/test_examples.py` checks their numbers |
 | `docs/`, `zensical.toml` | The documentation site: each example runs while it is built (`docs/show.py`), and `docs/js/figures.js` shows how its measure comes about; the README stays short and links to it |
+| `images/` | Two figures of the site for the README, as light and dark SVG |
 
 ## Conventions
 
