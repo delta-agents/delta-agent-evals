@@ -8,7 +8,7 @@ likely is likely? 881 Dutch readers, statisticians among them, put 29 probabilit
 ![Density plots, mean values, and 5% and 95% percentiles of the numerical interpretations given by all participants for each phrase](probability-phrases.webp)
 
 *Figure 2 from Willems, S. J. W., Albers, C. J., & Smeets, I. (2020). Variability in the
-interpretation of probability phrases used in Dutch news articles — a risk for miscommunication.
+interpretation of probability phrases used in Dutch news articles: a risk for miscommunication.
 Journal of Science Communication, 19(02), A03. <https://doi.org/10.22323/2.19020203>. © The
 authors, licensed under [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/):
 shared unchanged, for non-commercial use. The figure is not covered by this repository's GPL.*

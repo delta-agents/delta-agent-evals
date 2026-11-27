@@ -33,6 +33,3 @@ errors = verify(None, mae).on(**runs)
 skill = errors.skill("without_tools")
 per_question = verify(None, mae, preserve_dims=["question"]).on(**runs)
 bootstrap = per_question.paired_bootstrap("agent", "without_tools")
-
-if __name__ == "__main__":
-    print(errors.to_frame(), skill.to_frame(), bootstrap, sep="\n\n")

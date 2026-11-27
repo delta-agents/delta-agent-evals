@@ -27,12 +27,17 @@ Field = str | Callable[[Any], Any] | None
 
 
 def _value(answer: Any, path: Field) -> xr.DataArray:
-    """The field of one answer: a number, a bool as 0/1, or anything with `to_xarray()`; NaN when there is none."""
+    """The field of one answer: a number, a bool as 0/1, or anything with `to_xarray()`; NaN when there is none.
+
+    A dict may leave a key out; an attribute the answer does not have is a typo in the path and raises.
+    """
     if answer is not None and callable(path):
         answer = path(answer)
     elif answer is not None and path is not None:
         for part in path.split("."):
-            answer = answer.get(part) if isinstance(answer, dict) else getattr(answer, part, None)
+            if answer is None:
+                break
+            answer = answer.get(part) if isinstance(answer, dict) else getattr(answer, part)
     if hasattr(answer, "to_xarray"):
         return answer.to_xarray().astype(float)
     return xr.DataArray(np.nan if answer is None else float(answer))
@@ -74,8 +79,8 @@ class Verification:
     """The measures of one field: an xarray Dataset with a coordinate per agent, swept option or kept dimension."""
 
     data: xr.Dataset
-    missing: int
-    """Runs without an answer, left out of every measure."""
+    missing: xr.DataArray
+    """Runs without an answer, per agent, left out of every measure."""
 
     def __getitem__(self, measure: str) -> xr.DataArray:
         return self.data[measure]
@@ -93,13 +98,20 @@ class Verification:
     ) -> xr.Dataset:
         """Is agent `a` really better than `b`? A bootstrap over questions of d = score_a - score_b.
 
-        Needs a score per question: `verify(..., preserve_dims=["question"]).on(a=..., b=...)`.
+        Needs a score per question: `verify(..., preserve_dims=["question"]).on(a=..., b=...)`, with any
+        other coordinate selected first. Only for scores that add up over questions (MAE, MSE, Brier,
+        CRPS): a mean of per-question ratios (POD, CSI, FSS) or RMSEs is not the pooled score.
         `a_better` is the fraction of bootstrap means with d < 0, for errors (lower = better).
         """
         da = self.data[measure or next(iter(self.data))]
-        if "question" not in da.dims:
-            raise ValueError("Needs a score per question: verify(..., preserve_dims=['question'])")
+        if set(da.dims) != {"agent", "question"}:
+            raise ValueError(
+                f"Needs one score per agent and per question, not {da.dims}: "
+                "verify(..., preserve_dims=['question']).on(a=..., b=...), other coordinates selected"
+            )
         d = (da.sel(agent=a) - da.sel(agent=b)).dropna("question").values
+        if not len(d):
+            raise ValueError(f"No question with a score for both {a!r} and {b!r}")
         means = d[np.random.default_rng(seed).integers(0, len(d), (n_boot, len(d)))].mean(axis=1)
         lower, upper = np.quantile(means, [0.025, 0.975])
         stats = {"n": len(d), "mean_d": d.mean(), "ci_lower": lower, "ci_upper": upper}
@@ -114,7 +126,7 @@ class Verification:
     def to_analysis(self, title: str) -> ReportAnalysis:
         """A pydantic-evals analysis: one number, or the tidy table."""
         df = self.to_frame()
-        note = f"{self.missing} runs without an answer left out"
+        note = f"{int(self.missing.sum())} runs without an answer left out"
         if len(df) == 1:
             return ScalarResult(title=title, value=round(float(df.value[0]), 4), description=note)
         rows = df.round(4).astype(object).where(df.notna(), None).values.tolist()
@@ -139,12 +151,17 @@ class Verify(ReportEvaluator):
 
     def on(self, *reports: EvaluationReport, **named: EvaluationReport) -> Verification:
         """Verify one report, or several side by side along an `agent` dimension (named, or by report name)."""
+        names = [r.name for r in reports] + list(named)
+        if not names or len(set(names)) < len(names):
+            raise ValueError(f"Needs reports with distinct names, not {names}: name them, .on(a=..., b=...)")
         named = {r.name: r for r in reports} | named
         results = {name: self._one(r) for name, r in named.items()}
-        data = xr.concat([d for d, _ in results.values()], dim=pd.Index(list(named), name="agent"))
-        return Verification(
-            data if len(named) > 1 else data.squeeze("agent", drop=True), sum(m for _, m in results.values())
-        )
+        agents = pd.Index(list(named), name="agent")
+        data = xr.concat([d for d, _ in results.values()], dim=agents)
+        missing = xr.DataArray([m for _, m in results.values()], coords=[agents])
+        if len(named) == 1:
+            data, missing = data.squeeze("agent", drop=True), missing.squeeze("agent", drop=True)
+        return Verification(data, missing)
 
     def _one(self, report: EvaluationReport) -> tuple[xr.Dataset, int]:
         fcst, obs, missing = answers(report, self.field, self.reference)

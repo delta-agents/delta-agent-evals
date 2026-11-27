@@ -1,0 +1,78 @@
+# The documentation, built with Zensical: uv run --group docs zensical serve
+[project]
+site_name = "delta-agent-evals"
+site_url = "https://delta-agents.github.io/delta-agent-evals/"
+site_description = "How good are an AI agent's answers? Measured with the verification statistics of water and weather science"
+repo_url = "https://github.com/delta-agents/delta-agent-evals"
+repo_name = "delta-agents/delta-agent-evals"
+site_dir = "site"
+nav = [
+  { "Overview" = "index.md" },
+  { "Installation" = "installation.md" },
+  { "Example usage" = [
+    "example/index.md",
+    { "How deep?" = "example/how-deep.md" },
+    { "Will it flood?" = "example/will-it-flood.md" },
+    { "Where is the water?" = "example/dike-breach-map.md" },
+    { "What will the level be?" = "example/water-level-ensemble.md" },
+    { "Better than without tools?" = "example/better-than-without-tools.md" },
+    { "Likely, in words" = "example/verbal-forecast.md" },
+    { "In plain words?" = "example/plain-words.md" },
+  ] },
+  { "How it works" = "how-it-works.md" },
+  { "How answers are read" = [
+    { "Probability words" = "probability-phrases.md" },
+    { "Water terms" = "water-terms.md" },
+  ] },
+  { "API reference" = "api.md" },
+  { "Contributing" = "contributing.md" },
+]
+
+[project.theme]
+language = "en"
+features = [
+  "content.code.copy",
+  "content.tabs.link",
+  "navigation.footer",
+  "navigation.indexes",
+  "navigation.sections",
+  "navigation.top",
+  "navigation.tracking",
+  "search.highlight",
+  "toc.follow",
+]
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to light mode"
+
+[project.markdown_extensions]
+admonition = {}
+attr_list = {}
+md_in_html = {}
+toc.permalink = true
+pymdownx.highlight.pygments_lang_class = true
+pymdownx.inlinehilite = {}
+pymdownx.snippets.base_path = ["."]
+pymdownx.snippets.check_paths = true
+pymdownx.superfences = {}
+pymdownx.tabbed.alternate_style = true
+
+[project.plugins.markdown-exec]
+
+[project.plugins.mkdocstrings.handlers.python]
+paths = ["src"]
+options.show_source = false
+options.show_root_heading = true
+options.members_order = "source"
+options.separate_signature = true
+options.show_signature_annotations = true
+options.filters = ["!^_"]

@@ -1,6 +1,6 @@
-"""Answers with dimensions of their own: a map per lead time, or an ensemble per lead time.
+"""Answers with dimensions of their own: a map, an ensemble or a series per lead time.
 
-Any answer with `to_xarray()` works in `verify`; these two are ready-made and serialise compactly.
+Any answer with `to_xarray()` works in `verify`; these three are ready-made and serialise compactly.
 """
 
 from __future__ import annotations

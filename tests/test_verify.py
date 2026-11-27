@@ -42,6 +42,13 @@ def test_a_failed_run_is_a_missing_answer():
     v = verify(None, mae).on(DATASET.evaluate_sync(flaky, progress=False))
     assert v.missing == 1 and float(v["mae"]) == pytest.approx(0.5)
 
+    async def steady(question: str) -> float:
+        return 1.5
+
+    # side by side, each agent keeps its own count
+    runs = {a.__name__: DATASET.evaluate_sync(a, progress=False) for a in (flaky, steady)}
+    assert verify(None, mae).on(**runs).missing.to_series().to_dict() == {"flaky": 1, "steady": 0}
+
 
 def test_a_function_of_the_answer_as_field():
     class Answer(BaseModel):
@@ -82,8 +89,8 @@ def test_sweeps_and_agents_become_coordinates():
     async def b(question: str) -> float:
         return 0.0
 
-    def shifted_mae(fcst, obs, offset):
-        return mae(fcst + offset, obs)
+    def shifted_mae(fcst, obs, offset, **options):
+        return mae(fcst + offset, obs, **options)
 
     runs = {"a": DATASET.evaluate_sync(a, progress=False), "b": DATASET.evaluate_sync(b, progress=False)}
     v = verify(None, shifted_mae, offset=each(0.0, -0.2)).on(**runs)
@@ -93,6 +100,10 @@ def test_sweeps_and_agents_become_coordinates():
     assert list(v.to_frame().columns) == ["agent", "offset", "measure", "value"]
     with pytest.raises(ValueError, match="per question"):
         verify(None, mae).on(**runs).paired_bootstrap("a", "b")
+    # a swept option is one more dimension: select it before the bootstrap
+    swept = verify(None, shifted_mae, offset=each(0.0, -0.2), preserve_dims=["question"]).on(**runs)
+    with pytest.raises(ValueError, match="offset"):
+        swept.paired_bootstrap("a", "b")
 
 
 def test_fss_worked_out_by_hand():
@@ -115,8 +126,34 @@ def test_fss_worked_out_by_hand():
     v = verify(None, fss, event_threshold=0.5, window_size=1).on(ds.evaluate_sync(agent, progress=False))
     # per pixel FSS = 1 - sum (f - o)^2 / (sum f^2 + sum o^2): 1 - 0/4 = 1 after 10 min, 1 - 4/4 = 0 after 20
     assert v["fss"].values.tolist() == [1.0, 0.0]
-    # f0 = 2 of 4 pixels wet: useful = 0.5 + 0.5 / 2 = 0.75, met after 10 min and not after 20
-    assert float(v["fss_useful"]) == 0.75 and float(v["skillful_lead_time"]) == 10
+    # f0 = 2 of 4 pixels wet at both lead times: useful = 0.5 + 0.5 / 2 = 0.75, met after 10 min and not after 20
+    assert v["fss_useful"].values.tolist() == [0.75, 0.75] and float(v["skillful_lead_time"]) == 10
+
+    async def silent(question: str) -> Grid:
+        raise RuntimeError("the flood model did not answer")
+
+    # without any answer there is no skillful lead time, not one of 0
+    v = verify(None, fss, event_threshold=0.5, window_size=1).on(ds.evaluate_sync(silent, progress=False))
+    assert v.missing == 1 and np.isnan(float(v["skillful_lead_time"]))
+
+
+def test_a_typo_in_the_field_raises():
+    async def agent(question: str) -> float:
+        return 1.0
+
+    with pytest.raises(AttributeError, match="max_dpeth_m"):
+        verify("max_dpeth_m", mae).on(DATASET.evaluate_sync(agent, progress=False))
+
+
+def test_reports_need_distinct_names():
+    async def agent(question: str) -> float:
+        return 1.0
+
+    # two runs of the same task have the same report name: one would silently replace the other
+    twice = [DATASET.evaluate_sync(agent, progress=False) for _ in range(2)]
+    with pytest.raises(ValueError, match="distinct names"):
+        verify(None, mae).on(*twice)
+    assert verify(None, mae).on(first=twice[0], second=twice[1])["agent"].values.tolist() == ["first", "second"]
 
 
 def test_plot_lines_per_lead_time(tmp_path):
@@ -128,3 +165,15 @@ def test_plot_lines_per_lead_time(tmp_path):
     svg = path.read_text()
     # one colour per window: both window sizes in the legend
     assert "FSS of the breach map" in svg and all(f">{w}<" in svg for w in (1, 3))
+
+
+def test_figure_spec_has_tips_and_room_for_the_facets():
+    import dike_breach_map
+
+    from delta_agent_evals.plot import figure_spec
+
+    df, marks, figure = figure_spec(dike_breach_map.maps)
+    # fss and fss_useful have a lead time, skillful_lead_time not: 2 measures x 2 windows x 3 hours
+    assert len(df) == 12 and [name for name, _, _ in marks] == ["lineY", "dot"]
+    # a facet per measure, labelled on the right: 20 + 7 pixels x len("fss_useful") = 90
+    assert marks[1][2]["tip"] and marks[1][2]["fy"] == "measure" and figure["marginRight"] == 90

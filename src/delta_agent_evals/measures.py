@@ -35,21 +35,25 @@ def fss(
 ) -> xr.Dataset:
     """Fractions Skill Score per lead time over all questions, its 'useful' level and the skillful lead time.
 
-    Event = value >= threshold, in a square window of `window_size` pixels. FSS_useful = 0.5 + f0/2,
-    with f0 the observed fraction of events (Roberts & Lean 2008). The skillful lead time is the last
-    lead time up to which FSS stays >= FSS_useful from the first one; 0 if it never is.
+    Event = value >= threshold in a square window; FSS_useful = 0.5 + f0/2 with f0 the observed event
+    fraction per lead time (Roberts & Lean 2008). Skillful up to the first lead time below it; NaN without answers.
     """
-    score = scores.spatial.fss_2d(
-        fcst,
-        obs.broadcast_like(fcst),
-        event_threshold=event_threshold,
-        window_size=(window_size, window_size),
-        spatial_dims=spatial_dims,
-        preserve_dims=[lead_dim],
-        threshold_operator=np.greater_equal,
+    obs = obs.broadcast_like(fcst)
+    events = (obs >= event_threshold).where(obs.notnull() & fcst.notnull())
+    useful = 0.5 + events.mean([d for d in events.dims if d != lead_dim]) / 2
+    score = (
+        scores.spatial.fss_2d(
+            fcst,
+            obs,
+            event_threshold=event_threshold,
+            window_size=(window_size, window_size),
+            spatial_dims=spatial_dims,
+            preserve_dims=[lead_dim],
+            threshold_operator=np.greater_equal,
+        )
+        .sortby(lead_dim)
+        .where(useful.notnull())  # fss_2d gives 0 where there is no answer
     )
-    useful = 0.5 + float((obs >= event_threshold).mean()) / 2
     ok = (score >= useful).cumprod(lead_dim).astype(bool)  # True up to the first lead time that fails
-    return xr.Dataset(
-        {"fss": score, "fss_useful": useful, "skillful_lead_time": score[lead_dim].where(ok).max().fillna(0)}
-    )
+    skillful = score[lead_dim].where(ok).max().fillna(0).where(score.notnull().any())
+    return xr.Dataset({"fss": score, "fss_useful": useful, "skillful_lead_time": skillful})

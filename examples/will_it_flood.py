@@ -41,6 +41,3 @@ async def agent(question: str) -> Answer:
 report = dataset.evaluate_sync(agent, progress=False)
 table = verify("floods", contingency).on(report)
 brier = verify("p_floods", brier_score, reference="floods").on(report)
-
-if __name__ == "__main__":
-    print(table.to_frame(), brier.to_frame(), sep="\n\n")
