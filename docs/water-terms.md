@@ -7,7 +7,7 @@ pictures instead of words, the two groups agreed much more.
 
 For an agent that answers the public, these words are a risk: the answer can be right and still
 be read wrong. `delta_agent_evals.Jargon` flags them in each answer, and
-[plain_words.py](../examples/plain_words.py) shows it on a hydrologist's answers and plain ones.
+[Plain language](example/plain-language.md) shows it on a hydrologist's answers and plain ones.
 
 | Term | What most hydrologists chose | Hydrologists | Laypeople |
 |---|---|---|---|

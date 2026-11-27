@@ -12,15 +12,17 @@ errors = verify(None, mae, rmse).on(report)  # any metric of scores on the answe
 errors.to_frame()
 ```
 
-Each of the following pages is one file in [`examples/`](https://github.com/delta-agents/delta-agent-evals/tree/main/examples),
-with its output as the site was built:
+Each of the following pages is one kind of measure, with a use case from flood management as its example:
+a figure that shows how the measure comes about, the file in
+[`examples/`](https://github.com/delta-agents/delta-agent-evals/tree/main/examples), and its output as the
+site was built.
 
-| Page | Answer | Measures |
+| Measure | Answer | Use case |
 |---|---|---|
-| [How deep?](how-deep.md) | A number | `mae`, `rmse`, `percent_within_x` |
-| [Will it flood?](will-it-flood.md) | Yes or no, and a probability | `contingency`, `brier_score` |
-| [Where is the water?](dike-breach-map.md) | A map per hour | `fss` and the skillful lead time |
-| [What will the level be?](water-level-ensemble.md) | An ensemble | `crps_for_ensemble`, `brier_score_for_ensemble`, `rank_histogram` |
-| [Better than without tools?](better-than-without-tools.md) | Two agents | `.skill(...)`, `.paired_bootstrap(...)` |
-| [Likely, in words](verbal-forecast.md) | A probability word | `PHRASES` and `brier_score` per reader |
-| [In plain words?](plain-words.md) | Text | `Jargon` |
+| [Continuous errors](continuous-errors.md) | A number | How deep will the water be? |
+| [Yes or no](yes-or-no.md) | Yes or no, and a probability | Will it flood? |
+| [Maps](maps.md) | A map per lead time | Where is the water, every hour? |
+| [Ensembles](ensembles.md) | An ensemble | What will the water level be? |
+| [Skill and significance](skill-and-significance.md) | Two agents | Better than without tools? |
+| [Probability words](probability-words.md) | A word such as "likely" | How likely is it to flood? |
+| [Plain language](plain-language.md) | Text | Do people understand the answer? |

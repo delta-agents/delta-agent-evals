@@ -1,4 +1,8 @@
-"""What will the water level be? An agent that answers with an ensemble, and any `scores` metric for ensembles."""
+"""Ensembles: the fair CRPS, the Brier score above a threshold and the rank histogram.
+
+Use case: what will the water level at the Zutphen gauge be in 6 hours? The agent answers with
+four members, three times; the reference is the observed level.
+"""
 
 from pydantic_evals import Case, Dataset
 from scores.probability import brier_score_for_ensemble, crps_for_ensemble, rank_histogram
@@ -11,7 +15,7 @@ MEMBERS = [[1.0, 1.0, 2.0, 2.0], [1.0, 1.0, 1.0, 2.0], [2.0, 2.0, 2.0, 2.0]]
 OBSERVED = [1.8, 1.2, 1.2]
 
 dataset = Dataset(
-    name="water_level",
+    name="ensembles",
     cases=[
         Case(
             inputs=f"What will the water level at the Zutphen gauge be 6 hours after {t}? Give four members.",

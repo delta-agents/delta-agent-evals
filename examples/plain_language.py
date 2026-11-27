@@ -1,8 +1,9 @@
-"""Do people understand the answer? Water terms that most laypeople read differently from hydrologists.
+"""Plain language: water terms that most laypeople read differently from hydrologists.
 
-"Discharge" is the volume of water per second through a river's cross section to every hydrologist,
-and to 45% of laypeople (docs/water-terms.md). `Jargon` flags such terms in each answer; it needs
-no reference answer, so it also works as an online evaluator on live traffic.
+Use case: the same three answers by a hydrologist and in plain words. "Discharge" is the volume of
+water per second through a river's cross section to every hydrologist, and to 45% of laypeople
+(docs/water-terms.md). `Jargon` flags such terms in each answer; it needs no reference answer, so
+it also works as an online evaluator on live traffic.
 """
 
 from pydantic_evals import Case, Dataset
@@ -24,7 +25,7 @@ ANSWERS = {
     ),
 }
 
-dataset = Dataset(name="plain_words", cases=[Case(inputs=q) for q in ANSWERS], evaluators=[Jargon()])
+dataset = Dataset(name="plain_language", cases=[Case(inputs=q) for q in ANSWERS], evaluators=[Jargon()])
 
 
 async def hydrologist(question: str) -> str:

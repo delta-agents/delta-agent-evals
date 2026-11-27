@@ -13,6 +13,11 @@ questions run with [pydantic-evals](https://ai.pydantic.dev/evals/).
 Developed for [Delta Agents](https://delta-agents.nl) by [HKV lijn in water](https://www.hkv.nl); it
 works with any agent evaluated with pydantic-evals.
 
+```python exec="on" html="true"
+--8<-- "docs/show.py"
+print(figure("steps"))
+```
+
 ## Getting started
 
 - [Installation](installation.md)
@@ -21,7 +26,7 @@ works with any agent evaluated with pydantic-evals.
 ## User guide
 
 - [How it works](how-it-works.md)
-- How answers are read: [probability words](probability-phrases.md) and [water terms](water-terms.md)
+- Background: [reading probability words](probability-phrases.md) and [reading water terms](water-terms.md)
 - [API reference](api.md)
 
 ## Questions and contributing
