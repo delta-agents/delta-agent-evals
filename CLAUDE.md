@@ -13,6 +13,7 @@ uv run ruff check src tests examples  # lint (CI)
 uv run ruff format src tests examples # format
 uv run pytest -q                      # tests, including every example (CI)
 uv run examples/dike_breach_map.py    # one example
+uv run --group docs --all-extras zensical serve  # the documentation site (CI builds it strictly)
 ```
 
 Run the lint and the tests before every commit. Commit with a DCO sign-off (`git commit -s`).
@@ -29,7 +30,7 @@ Run the lint and the tests before every commit. Commit with a DCO sign-off (`git
 - **Titles** of issues, pull requests and their squash commits follow
   [Conventional Commits](https://www.conventionalcommits.org): `type(scope): summary`, the summary
   lowercase and imperative. Types: `feat`, `fix`, `perf`, `refactor`, `test`, `docs`, `ci`, `chore`.
-  Scopes: `verify`, `measures`, `answers`, `phrases`, `jargon`, `plot`, `examples`, `readme`.
+  Scopes: `verify`, `measures`, `answers`, `phrases`, `jargon`, `plot`, `examples`, `readme`, `docs`.
 - **Versions** follow [semantic versioning](https://semver.org): `pyproject.toml` and `__version__` carry
   it. Before 1.0, `feat` raises the minor version and `fix` the patch.
 - **Review before every commit** (hook in `.claude/settings.local.json`, local and not in git): the lint and
@@ -54,6 +55,7 @@ Run the lint and the tests before every commit. Commit with a DCO sign-off (`git
 | `src/delta_agent_evals/phrases.py` | `PHRASES`: how readers take 29 Dutch probability words (Willems, Albers & Smeets 2020) |
 | `src/delta_agent_evals/plot.py` | A `Verification` as an Observable Plot figure (optional `plot` extra) |
 | `examples/` | One question type per file, runnable; `tests/test_examples.py` checks their numbers |
+| `docs/`, `zensical.toml` | The documentation site: each example runs while it is built; the README stays short and links to it |
 
 ## Conventions
 
