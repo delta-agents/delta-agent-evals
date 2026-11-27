@@ -177,3 +177,12 @@ def test_figure_spec_has_tips_and_room_for_the_facets():
     assert len(df) == 12 and [name for name, _, _ in marks] == ["lineY", "dot"]
     # a facet per measure, labelled on the right: 20 + 7 pixels x len("fss_useful") = 90
     assert marks[1][2]["tip"] and marks[1][2]["fy"] == "measure" and figure["marginRight"] == 90
+
+
+def test_water_terms_where_they_are():
+    from delta_agent_evals import water_terms
+
+    text = "Downstream, the river basin floods; the Delta Programme has a river."
+    # "river basin" wins over "river" inside it, "floods" is "flood" in the plural, "Delta" in capitals is a name
+    spans = [(text[a:b], t.term) for a, b, t in water_terms(text)]
+    assert spans == [("river basin", "river basin"), ("floods", "flood"), ("river", "river")]
