@@ -1,6 +1,6 @@
 # API reference
 
-Generated from the docstrings.
+The application programming interface (API) of delta-agent-evals, generated from the docstrings.
 
 ::: delta_agent_evals.verify
 

@@ -116,7 +116,7 @@
         `<b>MAE</b> = (${errs.map(r => term(r, f)).join(" + ")}) / ${k} = <b>${f(d.mae, 3)}</b> m. ` +
         `<b>RMSE</b> = √((${errs.map(r => term(r, e => `${f(e)}²`)).join(" + ")}) / ${k}) = <b>${f(d.rmse, 3)}</b> m. ` +
         `<b>Within ± ${x} m</b>: <b>${f(d.within[d.thresholds.indexOf(x)], 0)}%</b> of the answers. ` +
-        `The question without an answer is NaN, left out of every measure and counted in <code>missing</code>.`];
+        `The question without an answer is NaN (not a number), left out of every measure and counted in <code>missing</code>.`];
     }, p => (p.y > top && p.y < top + n * rowH ? Math.floor((p.y - top) / rowH) : null));
   }
 
@@ -454,7 +454,7 @@
     const texts = [
       "A pydantic-evals <code>Dataset</code>: each case is a question as text, with its reference answer.",
       "The agent answers every question; pydantic-evals runs it, once or several times (<code>repeat</code>). One answer is missing.",
-      "<code>verify</code> takes one field of every answer and reference answer, here the number itself, as two xarray arrays along <code>question</code> (and <code>run</code>). The missing answer is NaN.",
+      "<code>verify</code> takes one field of every answer and reference answer, here the number itself, as two xarray arrays along <code>question</code> (and <code>run</code>). The missing answer is NaN (not a number).",
       "Any metric of <code>scores</code> compares the two arrays, here <code>mae</code> and <code>rmse</code>; NaN is left out, and ratios are pooled over all questions.",
       "The measures as an xarray Dataset, with <code>.missing</code>, <code>.to_frame()</code>, <code>.skill()</code> and <code>.plot()</code>.",
     ];

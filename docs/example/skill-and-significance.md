@@ -1,6 +1,6 @@
 # Skill and significance
 
-For two agents side by side: `.on(agent=..., without_tools=...)` adds an `agent` dimension, `.skill("without_tools")` the skill score against the reference, and `.paired_bootstrap(...)` whether the difference holds over the questions.
+For two agents side by side: `.on(agent=..., without_tools=...)` adds an `agent` dimension, `.skill("without_tools")` the skill score of the mean absolute error (MAE) against the reference, and `.paired_bootstrap(...)` whether the difference holds over the questions.
 
 **Use case:** is the agent with a flood model better than the same language model without tools, which can only guess the water depth?
 

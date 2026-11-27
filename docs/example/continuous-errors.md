@@ -1,6 +1,6 @@
 # Continuous errors
 
-For an answer that is a number: `mae` and `rmse` of `scores` give the error, `percent_within_x` how often the answer is within a tolerance, swept with `each(...)`.
+For an answer that is a number: `mae` and `rmse` of `scores` give the mean absolute error (MAE) and the root mean squared error (RMSE), `percent_within_x` how often the answer is within a tolerance, swept with `each(...)`.
 
 **Use case:** how deep will the water be at four places in Zutphen if dike ring 52 breaches? The agent does not answer for the last place.
 

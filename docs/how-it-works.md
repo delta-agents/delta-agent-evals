@@ -26,7 +26,7 @@ yes or no. A yes or no counts as 1 or 0. Anything with `to_xarray()` brings its 
 
 The answers become an array with a `question` and a `run` dimension. Repeated runs
 (`evaluate(repeat=5)`) are the `run` dimension: an ensemble for `scores`. A missing or failed answer
-is NaN, which `scores` leaves out; `.missing` counts these runs per agent.
+is NaN (not a number), which `scores` leaves out; `.missing` counts these runs per agent.
 
 ## Metrics
 
@@ -39,8 +39,10 @@ verify(None, percent_within_x, threshold=each(0.1, 0.25, 0.5))
 
 Where `scores` has no single metric, delta-agent-evals adds one in the same form:
 
-- `contingency`: POD, FAR, CSI and frequency bias from one table over all questions and runs
-- `fss`: the Fractions Skill Score per lead time, its useful level 0.5 + f0/2 and the skillful lead time
+- `contingency`: the probability of detection (POD), false alarm ratio (FAR), critical success index (CSI)
+  and frequency bias from one table over all questions and runs
+- `fss`: the Fractions Skill Score (FSS) per lead time, its useful level 0.5 + f0/2 with f0 the observed
+  fraction of events, and the skillful lead time
 
 ## The result
 
@@ -55,8 +57,9 @@ errors.skill("without_tools")  # 1 - error / error without tools
 ```
 
 `.skill(...)` is for errors, where 0 is perfect. `.paired_bootstrap(a, b)` needs a score per
-question (`preserve_dims=["question"]`) and holds for scores that add up over questions, such as MAE,
-Brier and CRPS, not for ratios or RMSE.
+question (`preserve_dims=["question"]`) and holds for scores that add up over questions, such as the mean absolute error (MAE),
+Brier and the continuous ranked probability score (CRPS), not for ratios or the root mean
+squared error (RMSE).
 
 `verify(...)` is also a report evaluator of pydantic-evals:
 `Dataset(..., report_evaluators=[verify("floods", contingency)])`. `Jargon` checks one answer at a
