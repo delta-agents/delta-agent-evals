@@ -6,7 +6,7 @@ questions, and returns one `Verification` to read, compare or plot.
 """
 
 from .answer_types import Ensemble, Grid, Series
-from .jargon import WATER_TERMS, Jargon, Term
+from .jargon import WATER_TERMS, Jargon, Term, water_terms
 from .measures import contingency, fss
 from .phrases import PHRASES, Phrase
 from .verify import Verification, Verify, answers, each, verify
@@ -27,6 +27,7 @@ __all__ = [
     "each",
     "fss",
     "verify",
+    "water_terms",
 ]
 
-__version__ = "0.4.0"
+__version__ = "0.5.0"

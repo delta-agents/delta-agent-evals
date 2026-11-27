@@ -1,4 +1,8 @@
-"""Will it flood? Yes/no answers in one contingency table, and the Brier score of the agent's confidence."""
+"""Yes or no: one contingency table for POD, FAR, CSI and bias, and the Brier score of a probability.
+
+Use case: will four places in Zutphen flood if dike ring 52 breaches? The agent has a hit, a miss,
+a false alarm and another hit, and says how sure it is of each answer.
+"""
 
 from pydantic import BaseModel
 from pydantic_evals import Case, Dataset
@@ -26,7 +30,7 @@ ANSWERS = {  # a hit, a miss, a false alarm and a hit
 }
 
 dataset = Dataset(
-    name="will_it_flood",
+    name="yes_or_no",
     cases=[
         Case(inputs=f"If dike ring 52 breaches, will the {p} in Zutphen flood?", expected_output=Answer(floods=f))
         for p, f in TRUTH.items()

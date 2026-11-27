@@ -1,0 +1,120 @@
+/* the figures of docs/js/figures.js: thin lines, one accent, light and dark */
+.md-typeset figure.fig {
+  --fig-hi: #27272a;
+  --fig-mid: #71717a;
+  --fig-lo: #d4d4d8;
+  --fig-plate: #fafafa;
+  --fig-accent: #fdf3e1;
+  --fig-answer: #d97706;
+  --fig-water: #8bb8e8;
+  --fig-good: #15803d;
+  --fig-bad: #b91c1c;
+  display: block;
+  max-width: 720px;
+  margin: 1.5rem 0 2rem;
+  text-align: left;
+}
+
+[data-md-color-scheme="slate"] .md-typeset figure.fig {
+  --fig-hi: #e4e4e7;
+  --fig-mid: #a1a1aa;
+  --fig-lo: #52525b;
+  --fig-plate: #1c1c21;
+  --fig-accent: #3a3122;
+  --fig-answer: #f59e0b;
+  --fig-water: #3d6fa6;
+  --fig-good: #4ade80;
+  --fig-bad: #f87171;
+}
+
+.md-typeset figure.fig svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-family: var(--md-text-font-family, system-ui), system-ui, sans-serif;
+  font-size: 12px;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.md-typeset figure.fig .fig-small { font-size: 11px; }
+.md-typeset figure.fig .fig-big { font-size: 15px; font-weight: 600; }
+.md-typeset figure.fig .fig-mono { font-family: var(--md-code-font-family, ui-monospace), monospace; font-size: 11.5px; }
+
+.md-typeset figure.fig figcaption {
+  margin: 0.6rem 0 0;
+  max-width: none;
+  font-size: 13px;
+  font-style: normal;
+  line-height: 1.5;
+  color: var(--fig-mid);
+  text-align: left;
+}
+
+.md-typeset figure.fig figcaption b { color: var(--fig-hi); font-weight: 600; }
+
+.md-typeset figure.fig .fig-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.6rem;
+  font-size: 13px;
+  color: var(--fig-mid);
+}
+
+.md-typeset figure.fig .fig-button {
+  font: inherit;
+  font-size: 13px;
+  padding: 0.2rem 0.75rem;
+  border: 1px solid var(--fig-lo);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fig-hi);
+  cursor: pointer;
+}
+
+.md-typeset figure.fig .fig-button:hover { border-color: var(--fig-mid); }
+.md-typeset figure.fig .fig-button[aria-pressed="true"] { background: var(--fig-accent); border-color: var(--fig-hi); }
+.md-typeset figure.fig .fig-button:focus-visible { outline: 2px solid var(--fig-answer); outline-offset: 2px; }
+
+/* the answers with their water terms (the figure on Plain language) */
+.md-typeset figure.fig .fig-answers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.2rem 1.2rem;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.md-typeset figure.fig .fig-answers .fig-question {
+  grid-column: 1 / -1;
+  margin-top: 0.7rem;
+  font-size: 13px;
+  color: var(--fig-mid);
+}
+
+.md-typeset figure.fig .fig-answers .fig-head { font-size: 12px; color: var(--fig-mid); border-bottom: 1px solid var(--fig-lo); }
+.md-typeset figure.fig .fig-answer { padding: 0.35rem 0.6rem; border: 1px solid var(--fig-lo); border-radius: 4px; background: var(--fig-plate); color: var(--fig-hi); }
+.md-typeset figure.fig .fig-answer .fig-verdict { float: right; margin-left: 0.5rem; font-size: 12px; }
+
+.md-typeset figure.fig .fig-term {
+  padding: 0 0.1rem;
+  border-radius: 2px;
+  background: none;
+  color: inherit;
+  text-decoration: underline 2px;
+  text-underline-offset: 3px;
+  cursor: help;
+}
+
+.md-typeset figure.fig .fig-term.fig-misread { text-decoration-color: var(--fig-bad); }
+.md-typeset figure.fig .fig-term.fig-read { text-decoration-color: var(--fig-good); }
+.md-typeset figure.fig .fig-term:hover,
+.md-typeset figure.fig .fig-term:focus-visible,
+.md-typeset figure.fig .fig-term.fig-on { background: var(--fig-accent); outline: none; }
+
+@media (max-width: 560px) {
+  .md-typeset figure.fig .fig-answers { grid-template-columns: minmax(0, 1fr); }
+}

@@ -28,17 +28,18 @@ errors = verify(None, mae, rmse).on(report)  # any metric of scores on the answe
 errors.to_frame()
 ```
 
-More in [`examples/`](examples/), one question type per file:
+One kind of measure per example, each with a use case from flood management; the
+[documentation](https://delta-agents.github.io/delta-agent-evals/example/) shows how each measure comes about:
 
-| Example | Question | Measures |
-|---|---|---|
-| [how_deep.py](examples/how_deep.py) | How deep will the water be? | `mae`, `rmse`, `percent_within_x` |
-| [will_it_flood.py](examples/will_it_flood.py) | Will it flood? | `contingency`, `brier_score` |
-| [dike_breach_map.py](examples/dike_breach_map.py) | Where is the water, every hour? | `fss` and the skillful lead time |
-| [water_level_ensemble.py](examples/water_level_ensemble.py) | What will the water level be? | `crps_for_ensemble`, `brier_score_for_ensemble`, `rank_histogram` |
-| [better_than_without_tools.py](examples/better_than_without_tools.py) | Better than without tools? | `.skill(...)`, `.paired_bootstrap(...)` |
-| [verbal_forecast.py](examples/verbal_forecast.py) | Will it flood, in words? | `PHRASES` and `brier_score` per reader |
-| [plain_words.py](examples/plain_words.py) | Do people understand the answer? | `Jargon` |
+| Measure | Example | Use case | Metrics |
+|---|---|---|---|
+| [Continuous errors](https://delta-agents.github.io/delta-agent-evals/example/continuous-errors/) | [continuous_errors.py](examples/continuous_errors.py) | How deep will the water be? | `mae`, `rmse`, `percent_within_x` |
+| [Yes or no](https://delta-agents.github.io/delta-agent-evals/example/yes-or-no/) | [yes_or_no.py](examples/yes_or_no.py) | Will it flood? | `contingency`, `brier_score` |
+| [Maps](https://delta-agents.github.io/delta-agent-evals/example/maps/) | [spatial_fss.py](examples/spatial_fss.py) | Where is the water, every hour? | `fss` and the skillful lead time |
+| [Ensembles](https://delta-agents.github.io/delta-agent-evals/example/ensembles/) | [ensembles.py](examples/ensembles.py) | What will the water level be? | `crps_for_ensemble`, `brier_score_for_ensemble`, `rank_histogram` |
+| [Skill and significance](https://delta-agents.github.io/delta-agent-evals/example/skill-and-significance/) | [skill_and_significance.py](examples/skill_and_significance.py) | Better than without tools? | `.skill(...)`, `.paired_bootstrap(...)` |
+| [Probability words](https://delta-agents.github.io/delta-agent-evals/example/probability-words/) | [probability_words.py](examples/probability_words.py) | How likely is it to flood? | `PHRASES` and `brier_score` per reader |
+| [Plain language](https://delta-agents.github.io/delta-agent-evals/example/plain-language/) | [plain_language.py](examples/plain_language.py) | Do people understand the answer? | `Jargon` |
 
 ## Licence
 

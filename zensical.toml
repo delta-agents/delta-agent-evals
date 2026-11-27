@@ -6,23 +6,25 @@ site_description = "How good are an AI agent's answers? Measured with the verifi
 repo_url = "https://github.com/delta-agents/delta-agent-evals"
 repo_name = "delta-agents/delta-agent-evals"
 site_dir = "site"
+extra_css = ["css/figures.css"]
+extra_javascript = ["js/figures.js"]
 nav = [
   { "Overview" = "index.md" },
   { "Installation" = "installation.md" },
   { "Example usage" = [
     "example/index.md",
-    { "How deep?" = "example/how-deep.md" },
-    { "Will it flood?" = "example/will-it-flood.md" },
-    { "Where is the water?" = "example/dike-breach-map.md" },
-    { "What will the level be?" = "example/water-level-ensemble.md" },
-    { "Better than without tools?" = "example/better-than-without-tools.md" },
-    { "Likely, in words" = "example/verbal-forecast.md" },
-    { "In plain words?" = "example/plain-words.md" },
+    { "Continuous errors" = "example/continuous-errors.md" },
+    { "Yes or no" = "example/yes-or-no.md" },
+    { "Maps" = "example/maps.md" },
+    { "Ensembles" = "example/ensembles.md" },
+    { "Skill and significance" = "example/skill-and-significance.md" },
+    { "Probability words" = "example/probability-words.md" },
+    { "Plain language" = "example/plain-language.md" },
   ] },
   { "How it works" = "how-it-works.md" },
-  { "How answers are read" = [
-    { "Probability words" = "probability-phrases.md" },
-    { "Water terms" = "water-terms.md" },
+  { "Background" = [
+    { "Reading probability words" = "probability-phrases.md" },
+    { "Reading water terms" = "water-terms.md" },
   ] },
   { "API reference" = "api.md" },
   { "Contributing" = "contributing.md" },

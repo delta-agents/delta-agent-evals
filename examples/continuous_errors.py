@@ -1,4 +1,8 @@
-"""How deep will the water be? Errors of a number in the answer, and how often it is within a tolerance."""
+"""Continuous errors: MAE, RMSE and how often an answer is within a tolerance.
+
+Use case: how deep will the water be at four places in Zutphen if dike ring 52 breaches? The
+agent does not answer for the last place; that answer is left out and counted as missing.
+"""
 
 from pydantic_evals import Case, Dataset
 from scores.continuous import mae, percent_within_x, rmse
@@ -6,10 +10,10 @@ from scores.continuous import mae, percent_within_x, rmse
 from delta_agent_evals import each, verify
 
 TRUTH = {"fire station": 1.0, "town hall": 2.0, "school": 0.0, "pumping station": 4.0}
-ANSWERS = {"fire station": 1.05, "town hall": 1.8, "school": 0.0, "pumping station": None}  # no answer for the last
+ANSWERS = {"fire station": 1.05, "town hall": 1.8, "school": 0.0, "pumping station": None}
 
 dataset = Dataset(
-    name="how_deep",
+    name="continuous_errors",
     cases=[
         Case(inputs=f"If dike ring 52 breaches, how deep is the water at the {p} in Zutphen?", expected_output=d)
         for p, d in TRUTH.items()

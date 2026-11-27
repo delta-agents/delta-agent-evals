@@ -1,8 +1,9 @@
-"""Will it flood? An agent that answers in words, scored the way people read them.
+"""Probability words: an answer in words, scored the way people read them.
 
-"Likely" is 57% to a cautious reader and 91% to a bold one (docs/probability-phrases.md). Each
-word becomes the low, mean and high reading of that study, and the Brier score shows what the
-same answers are worth to each reader.
+Use case: how likely is a place in Zutphen to flood? The agent answers "likely" instead of a number.
+"Likely" is 57% to a cautious reader and 91% to a bold one (docs/probability-phrases.md). Each word
+becomes the low, mean and high reading of that study, and the Brier score shows what the same
+answers are worth to each reader.
 """
 
 from pydantic import BaseModel
@@ -27,7 +28,7 @@ WORDS = {  # "fifty-fifty" is not in the study, so that answer counts as missing
 }
 
 dataset = Dataset(
-    name="verbal_forecast",
+    name="probability_words",
     cases=[
         Case(
             inputs=f"If dike ring 52 breaches, how likely is the {p} in Zutphen to flood?",

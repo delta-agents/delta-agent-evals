@@ -158,22 +158,31 @@ def test_reports_need_distinct_names():
 
 def test_plot_lines_per_lead_time(tmp_path):
     pytest.importorskip("pyobsplot")
-    import dike_breach_map
+    import spatial_fss
 
     path = tmp_path / "fss.html"
-    dike_breach_map.maps.plot(format="html", path=str(path), title="FSS of the breach map")
+    spatial_fss.maps.plot(format="html", path=str(path), title="FSS of the breach map")
     svg = path.read_text()
     # one colour per window: both window sizes in the legend
     assert "FSS of the breach map" in svg and all(f">{w}<" in svg for w in (1, 3))
 
 
 def test_figure_spec_has_tips_and_room_for_the_facets():
-    import dike_breach_map
+    import spatial_fss
 
     from delta_agent_evals.plot import figure_spec
 
-    df, marks, figure = figure_spec(dike_breach_map.maps)
+    df, marks, figure = figure_spec(spatial_fss.maps)
     # fss and fss_useful have a lead time, skillful_lead_time not: 2 measures x 2 windows x 3 hours
     assert len(df) == 12 and [name for name, _, _ in marks] == ["lineY", "dot"]
     # a facet per measure, labelled on the right: 20 + 7 pixels x len("fss_useful") = 90
     assert marks[1][2]["tip"] and marks[1][2]["fy"] == "measure" and figure["marginRight"] == 90
+
+
+def test_water_terms_where_they_are():
+    from delta_agent_evals import water_terms
+
+    text = "Downstream, the river basin floods; the Delta Programme has a river."
+    # "river basin" wins over "river" inside it, "floods" is "flood" in the plural, "Delta" in capitals is a name
+    spans = [(text[a:b], t.term) for a, b, t in water_terms(text)]
+    assert spans == [("river basin", "river basin"), ("floods", "flood"), ("river", "river")]

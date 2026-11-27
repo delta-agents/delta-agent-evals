@@ -43,20 +43,27 @@ WATER_TERMS: dict[str, Term] = {
 }
 
 
-@dataclass
-class Jargon(Evaluator):
-    """Passes unless the answer uses a water term that fewer than `below` percent of laypeople read as hydrologists do.
+def water_terms(text: str) -> list[tuple[int, int, Term]]:
+    """The water terms in a text as (start, end, term), in reading order.
 
     Terms count in lower case only, so names such as "Delta Programme" are left alone, and the longest
     term wins: "river basin" is not also "river".
     """
+    found: list[tuple[int, int, Term]] = []
+    for t in sorted(WATER_TERMS.values(), key=lambda t: -len(t.term)):
+        for m in re.finditer(rf"\b{t.term}s?\b", text):
+            if not any(a < m.end() and m.start() < b for a, b, _ in found):
+                found.append((m.start(), m.end(), t))
+    return sorted(found)
+
+
+@dataclass
+class Jargon(Evaluator):
+    """Passes unless the answer uses a water term that fewer than `below` percent of laypeople read as hydrologists do."""
 
     below: int = 50
 
     def evaluate(self, ctx: EvaluatorContext) -> EvaluationReason:
-        text, misread = str(ctx.output), []
-        for t in sorted(WATER_TERMS.values(), key=lambda t: -len(t.term)):
-            text, found = re.subn(rf"\b{t.term}s?\b", " ", text)
-            misread += [t] if found and t.laypeople < self.below else []
+        misread = dict.fromkeys(t for _, _, t in water_terms(str(ctx.output)) if t.laypeople < self.below)
         reason = "; ".join(f'"{t.term}": only {t.laypeople}% of laypeople take it as {t.meaning}' for t in misread)
         return EvaluationReason(value=not misread, reason=reason or None)

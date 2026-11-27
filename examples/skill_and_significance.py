@@ -1,4 +1,8 @@
-"""Is the agent better than the same language model without tools? Skill score and a paired bootstrap."""
+"""Skill and significance: a skill score against a reference, and a paired bootstrap over the questions.
+
+Use case: is the agent with a flood model better than the same language model without tools, which
+can only guess the water depth?
+"""
 
 from pydantic_evals import Case, Dataset
 from scores.continuous import mae
@@ -9,7 +13,7 @@ TRUTH = {"fire station": 1.0, "town hall": 2.0, "school": 0.0, "pumping station"
 ANSWERS = {"fire station": 1.05, "town hall": 1.8, "school": 0.0, "pumping station": 3.6}
 
 dataset = Dataset(
-    name="how_deep",
+    name="skill_and_significance",
     cases=[
         Case(inputs=f"If dike ring 52 breaches, how deep is the water at the {p} in Zutphen?", expected_output=d)
         for p, d in TRUTH.items()

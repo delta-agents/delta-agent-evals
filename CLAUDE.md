@@ -53,8 +53,8 @@ Run the lint and the tests before every commit. Commit with a DCO sign-off (`git
 | `src/delta_agent_evals/answer_types.py` | Answers with dimensions: `Grid`, `Ensemble`, `Series` |
 | `src/delta_agent_evals/phrases.py` | `PHRASES`: how readers take 29 Dutch probability words (Willems, Albers & Smeets 2020) |
 | `src/delta_agent_evals/plot.py` | A `Verification` as an Observable Plot figure (optional `plot` extra) |
-| `examples/` | One question type per file, runnable; `tests/test_examples.py` checks their numbers |
-| `docs/`, `zensical.toml` | The documentation site: each example runs while it is built; the README stays short and links to it |
+| `examples/` | One kind of measure per file, with a use case from flood management; `tests/test_examples.py` checks their numbers |
+| `docs/`, `zensical.toml` | The documentation site: each example runs while it is built (`docs/show.py`), and `docs/js/figures.js` shows how its measure comes about; the README stays short and links to it |
 
 ## Conventions
 

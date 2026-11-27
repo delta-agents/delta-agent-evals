@@ -20,7 +20,7 @@ advise giving a number, or a word with a number, rather than a word alone.
 
 Mean and 5%–95% range of the readings in percent, read from the figure, with the Dutch words
 the readers saw (the paper's Table 2). The same table is `delta_agent_evals.PHRASES`, by Dutch or
-English word, and a test keeps this table equal to it; [verbal_forecast.py](../examples/verbal_forecast.py)
+English word, and a test keeps this table equal to it; [Probability words](example/probability-words.md)
 scores an agent's words with it.
 
 | Dutch | English | Mean | 5%–95% |

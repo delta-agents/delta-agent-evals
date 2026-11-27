@@ -1,8 +1,9 @@
-"""Where is the water after a dike breach? A map per hour, verified with the Fractions Skill Score.
+"""Maps: the Fractions Skill Score per lead time, its useful level and the skillful lead time.
 
-A polder of 3 x 10 pixels of 25 m with the breach on its west side. In the reference, a model run,
-the water covers two more pixels eastward every hour. The agent gets the width right but places the
-water one pixel further east every hour. Small enough to count by hand: see tests/test_examples.py.
+Use case: where is the water after a dike breach, every hour? A polder of 3 x 10 pixels of 25 m
+with the breach on its west side. In the reference, a model run, the water covers two more pixels
+eastward every hour. The agent gets the width right but places the water one pixel further east
+every hour. Small enough to count by hand: see tests/test_examples.py.
 """
 
 import numpy as np
@@ -20,7 +21,7 @@ def flood(shift: int = 0) -> Grid:
 
 
 dataset = Dataset(
-    name="dike_breach",
+    name="spatial_fss",
     cases=[
         Case(
             inputs="The dike breaches at the pumping station at 14:00. "
