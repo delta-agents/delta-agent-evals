@@ -82,8 +82,8 @@ def test_sweeps_and_agents_become_coordinates():
     async def b(question: str) -> float:
         return 0.0
 
-    def shifted_mae(fcst, obs, offset):
-        return mae(fcst + offset, obs)
+    def shifted_mae(fcst, obs, offset, **options):
+        return mae(fcst + offset, obs, **options)
 
     runs = {"a": DATASET.evaluate_sync(a, progress=False), "b": DATASET.evaluate_sync(b, progress=False)}
     v = verify(None, shifted_mae, offset=each(0.0, -0.2)).on(**runs)
@@ -93,6 +93,10 @@ def test_sweeps_and_agents_become_coordinates():
     assert list(v.to_frame().columns) == ["agent", "offset", "measure", "value"]
     with pytest.raises(ValueError, match="per question"):
         verify(None, mae).on(**runs).paired_bootstrap("a", "b")
+    # a swept option is one more dimension: select it before the bootstrap
+    swept = verify(None, shifted_mae, offset=each(0.0, -0.2), preserve_dims=["question"]).on(**runs)
+    with pytest.raises(ValueError, match="offset"):
+        swept.paired_bootstrap("a", "b")
 
 
 def test_fss_worked_out_by_hand():
@@ -124,6 +128,25 @@ def test_fss_worked_out_by_hand():
     # without any answer there is no skillful lead time, not one of 0
     v = verify(None, fss, event_threshold=0.5, window_size=1).on(ds.evaluate_sync(silent, progress=False))
     assert v.missing == 1 and np.isnan(float(v["skillful_lead_time"]))
+
+
+def test_a_typo_in_the_field_raises():
+    async def agent(question: str) -> float:
+        return 1.0
+
+    with pytest.raises(AttributeError, match="max_dpeth_m"):
+        verify("max_dpeth_m", mae).on(DATASET.evaluate_sync(agent, progress=False))
+
+
+def test_reports_need_distinct_names():
+    async def agent(question: str) -> float:
+        return 1.0
+
+    # two runs of the same task have the same report name: one would silently replace the other
+    twice = [DATASET.evaluate_sync(agent, progress=False) for _ in range(2)]
+    with pytest.raises(ValueError, match="distinct names"):
+        verify(None, mae).on(*twice)
+    assert verify(None, mae).on(first=twice[0], second=twice[1])["agent"].values.tolist() == ["first", "second"]
 
 
 def test_plot_lines_per_lead_time(tmp_path):
