@@ -36,5 +36,5 @@ keeps the two equal.
 by jargon: how the interpretation of water-related terms differs between hydrology experts and the
 general audience. Hydrology and Earth System Sciences, 23, 393–403.
 <https://doi.org/10.5194/hess-23-393-2019>, licensed under
-[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Survey data and code:
+[Creative Commons Attribution (CC BY) 4.0](https://creativecommons.org/licenses/by/4.0/). Survey data and code:
 <https://doi.org/10.17605/OSF.IO/WK9S6>.*

@@ -1,7 +1,7 @@
 # delta-agent-evals
 
-**How good are an AI agent's answers? Measured with the statistics that water and weather science
-use to test their models.**
+**How good are the answers of an artificial intelligence (AI) agent? Measured with the statistics
+that water and weather science use to test their models.**
 
 An agent's answer is treated like a model result, the reference answer like the observation, and any
 metric of [scores](https://github.com/nci/scores) compares the two over a dataset of questions run
@@ -43,5 +43,5 @@ One kind of measure per example, each with a use case from flood management; the
 
 ## Licence
 
-GPL-3.0, [HKV lijn in water](https://www.hkv.nl). The figure in
-[docs/probability-phrases.md](docs/probability-phrases.md) is CC BY-NC-ND 4.0 by its authors.
+GNU General Public License (GPL) 3.0, [HKV lijn in water](https://www.hkv.nl). The figure in
+[docs/probability-phrases.md](docs/probability-phrases.md) is Creative Commons Attribution-NonCommercial-NoDerivatives (CC BY-NC-ND) 4.0 by its authors.

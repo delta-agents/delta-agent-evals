@@ -10,8 +10,8 @@ likely is likely? 881 Dutch readers, statisticians among them, put 29 probabilit
 *Figure 2 from Willems, S. J. W., Albers, C. J., & Smeets, I. (2020). Variability in the
 interpretation of probability phrases used in Dutch news articles: a risk for miscommunication.
 Journal of Science Communication, 19(02), A03. <https://doi.org/10.22323/2.19020203>. © The
-authors, licensed under [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/):
-shared unchanged, for non-commercial use. The figure is not covered by this repository's GPL.*
+authors, licensed under [Creative Commons Attribution-NonCommercial-NoDerivatives (CC BY-NC-ND) 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/):
+shared unchanged, for non-commercial use. The figure is not covered by this repository's GNU General Public License (GPL).*
 
 The readers saw the Dutch words; the figure gives the paper's English translations. The authors
 advise giving a number, or a word with a number, rather than a word alone.
