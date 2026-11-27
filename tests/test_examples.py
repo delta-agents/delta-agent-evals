@@ -39,16 +39,17 @@ def test_will_it_flood():
 
 
 def test_dike_breach_map():
-    # reference wet columns 0-1, 0-3, 0-5; the agent's 0-1, 1-4, 2-7. Wet are 12 of 30 pixels over the three
-    # hours, so f0 = 0.4 and FSS_useful = 0.5 + 0.4 / 2 = 0.7
-    assert float(dike_breach_map.maps["fss_useful"].isel(window_size=0)) == pytest.approx(0.7)
+    # reference wet columns 0-1, 0-3, 0-5; the agent's 0-1, 1-4, 2-7. Wet are 2, 4 and 6 of 10 columns per
+    # hour, so f0 = 0.2, 0.4, 0.6 and FSS_useful = 0.5 + f0 / 2 = 0.6, 0.7, 0.8
+    useful = dike_breach_map.maps["fss_useful"].sel(window_size=1).values.tolist()
+    assert useful == pytest.approx([0.6, 0.7, 0.8])
     # per pixel, FSS = 1 - mismatches / (wet in answer + wet in reference), per row of the polder:
-    # 1 - 0/4 = 1, 1 - 2/8 = 0.75, 1 - 4/12 = 0.667 -> useful for two hours
+    # 1 - 0/4 = 1 >= 0.6, 1 - 2/8 = 0.75 >= 0.7, 1 - 4/12 = 0.667 < 0.8 -> useful for two hours
     fss = dike_breach_map.maps["fss"]
     assert fss.sel(window_size=1).values.tolist() == pytest.approx([1, 0.75, 2 / 3])
     # over 3 x 3 pixels the fractions of wet columns in the 8 windows (centred on columns 1-8) are compared:
     # at 16:00 reference 3,3,2,1,0,0,0,0 and answer 2,3,3,2,1,0,0,0 thirds -> 1 - 4 / (23 + 27) = 0.92;
-    # at 17:00 reference 3,3,3,3,2,1,0,0 and answer 1,2,3,3,3,3,2,1 thirds -> 1 - 15 / (41 + 46) = 0.828
+    # at 17:00 reference 3,3,3,3,2,1,0,0 and answer 1,2,3,3,3,3,2,1 thirds -> 1 - 15 / (41 + 46) = 0.828 >= 0.8
     assert fss.sel(window_size=3).values.tolist() == pytest.approx([1, 1 - 4 / 50, 1 - 15 / 87])
     # so the map is useful for two hours per 25 m pixel and for all three hours at 75 m
     assert dike_breach_map.maps["skillful_lead_time"].values.tolist() == [120, 180]

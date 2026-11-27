@@ -115,8 +115,15 @@ def test_fss_worked_out_by_hand():
     v = verify(None, fss, event_threshold=0.5, window_size=1).on(ds.evaluate_sync(agent, progress=False))
     # per pixel FSS = 1 - sum (f - o)^2 / (sum f^2 + sum o^2): 1 - 0/4 = 1 after 10 min, 1 - 4/4 = 0 after 20
     assert v["fss"].values.tolist() == [1.0, 0.0]
-    # f0 = 2 of 4 pixels wet: useful = 0.5 + 0.5 / 2 = 0.75, met after 10 min and not after 20
-    assert float(v["fss_useful"]) == 0.75 and float(v["skillful_lead_time"]) == 10
+    # f0 = 2 of 4 pixels wet at both lead times: useful = 0.5 + 0.5 / 2 = 0.75, met after 10 min and not after 20
+    assert v["fss_useful"].values.tolist() == [0.75, 0.75] and float(v["skillful_lead_time"]) == 10
+
+    async def silent(question: str) -> Grid:
+        raise RuntimeError("the flood model did not answer")
+
+    # without any answer there is no skillful lead time, not one of 0
+    v = verify(None, fss, event_threshold=0.5, window_size=1).on(ds.evaluate_sync(silent, progress=False))
+    assert v.missing == 1 and np.isnan(float(v["skillful_lead_time"]))
 
 
 def test_plot_lines_per_lead_time(tmp_path):
